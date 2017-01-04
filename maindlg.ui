@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>mainDlg</class>
+ <widget class="QTabWidget" name="mainDlg">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>953</width>
+    <height>710</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>KML规划工具</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>app.ico</normaloff>app.ico</iconset>
+  </property>
+  <property name="currentIndex">
+   <number>1</number>
+  </property>
+  <widget class="QWidget" name="tab">
+   <attribute name="title">
+    <string>点面计算</string>
+   </attribute>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>点图层文件</string>
+        </property>
+        <property name="buddy">
+         <cstring>txtPointFilePath</cstring>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="txtPointFilePath">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnChoosePointFile">
+        <property name="text">
+         <string>选择文件</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>面图层文件</string>
+        </property>
+        <property name="buddy">
+         <cstring>txtPolygonFilePath</cstring>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="txtPolygonFilePath">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnChoosePolygonFile">
+        <property name="text">
+         <string>选择文件</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnCalculate">
+        <property name="text">
+         <string>计算</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QPlainTextEdit" name="txtResult">
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="tab">
+   <attribute name="title">
+    <string>面积计算</string>
+   </attribute>
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <item>
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>面图层文件</string>
+        </property>
+        <property name="buddy">
+         <cstring>txtPolygonFilePath</cstring>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="txtAreaFilePath">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnChooseAreaFile">
+        <property name="text">
+         <string>选择文件</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_5">
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnCalculateArea">
+        <property name="text">
+         <string>计算</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QPlainTextEdit" name="txtAreaResult">
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="tab_2">
+   <attribute name="title">
+    <string>长度计算</string>
+   </attribute>
+   <layout class="QVBoxLayout" name="verticalLayout_3">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_7">
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>线图层文件</string>
+        </property>
+        <property name="buddy">
+         <cstring>txtLineFilePath</cstring>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="txtLineFilePath">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnChooseLineFile">
+        <property name="text">
+         <string>选择文件</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_8">
+      <item>
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnCalculateLength">
+        <property name="text">
+         <string>计算</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QPlainTextEdit" name="txtLengthResult">
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>btnChoosePointFile</sender>
+   <signal>clicked()</signal>
+   <receiver>mainDlg</receiver>
+   <slot>pointFileChosen()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>938</x>
+     <y>54</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>295</x>
+     <y>-14</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnChoosePolygonFile</sender>
+   <signal>clicked()</signal>
+   <receiver>mainDlg</receiver>
+   <slot>polygonFileChosen()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>938</x>
+     <y>85</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>365</x>
+     <y>5</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnCalculate</sender>
+   <signal>clicked()</signal>
+   <receiver>mainDlg</receiver>
+   <slot>doCalculate()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>938</x>
+     <y>116</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>270</x>
+     <y>99</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnChooseAreaFile</sender>
+   <signal>clicked()</signal>
+   <receiver>mainDlg</receiver>
+   <slot>areaFileChosen()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>938</x>
+     <y>54</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>430</x>
+     <y>10</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnCalculateArea</sender>
+   <signal>clicked()</signal>
+   <receiver>mainDlg</receiver>
+   <slot>doCalculateArea()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>938</x>
+     <y>85</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>329</x>
+     <y>58</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnCalculateLength</sender>
+   <signal>clicked()</signal>
+   <receiver>mainDlg</receiver>
+   <slot>doCalculateLength()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>902</x>
+     <y>74</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>496</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnChooseLineFile</sender>
+   <signal>clicked()</signal>
+   <receiver>mainDlg</receiver>
+   <slot>lineFileChosen()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>882</x>
+     <y>43</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>646</x>
+     <y>-9</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>pointFileChosen()</slot>
+  <slot>polygonFileChosen()</slot>
+  <slot>doCalculate()</slot>
+  <slot>areaFileChosen()</slot>
+  <slot>doCalculateArea()</slot>
+  <slot>doCalculateLength()</slot>
+  <slot>lineFileChosen()</slot>
+ </slots>
+</ui>
