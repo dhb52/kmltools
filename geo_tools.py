@@ -66,12 +66,13 @@ def point_in_poly(x, y, poly):
 
 
 def find_features(result, element, feature_type, path = ""):
+    new_path = path
     if not getattr(element, 'features', None):
         return
     for feature in element.features():
         if isinstance(feature, kml.Folder):
             if feature.name == None: feature.name = ""
-            path = '/'.join((path, feature.name))
+            new_path = '/'.join((path, feature.name))
         elif isinstance(feature, kml.Placemark):
             if feature_type == geometry.Polygon and isinstance(feature.geometry, feature_type):
                 coords = [ (p[0], p[1]) for p in feature.geometry.exterior.coords ]
@@ -83,7 +84,7 @@ def find_features(result, element, feature_type, path = ""):
             elif feature_type == geometry.LineString and isinstance(feature.geometry, feature_type):
                 line = GeoLine(feature.name, path, feature.geometry.coords)
                 result.append(line)
-        find_features(result, feature, feature_type, path)
+        find_features(result, feature, feature_type, new_path)
 
 
 # def _reproject(latitude, longitude):
