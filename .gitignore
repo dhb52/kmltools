@@ -99,3 +99,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+*.kml
+*.kmz
+ui_maindlg.py
