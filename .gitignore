@@ -102,3 +102,11 @@ $RECYCLE.BIN/
 *.kml
 *.kmz
 ui_maindlg.py
+
+# venv
+Scripts
+Lib
+Include
+pyvenv.cfg
+
+pip-selfcheck.json

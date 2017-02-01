@@ -1,0 +1,6 @@
+fastkml==0.11
+geographiclib==1.46.3
+lxml==3.7.2
+PyQt5==5.7.1
+setuptools==34.1.0
+cx-Freeze==5.0.1

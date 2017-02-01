@@ -5,7 +5,7 @@ from cx_Freeze import setup, Executable
 build_exe_options = {
 	"packages": ["os"], 
 	"excludes": ["tkinter"],
-	"include_files": [r'D:\Python27\Lib\site-packages\shapely\DLLs\geos_c.dll',
+	"include_files": [#r'D:\Python27\Lib\site-packages\shapely\DLLs\geos_c.dll',
                       'app.ico',
                       ],
 }
