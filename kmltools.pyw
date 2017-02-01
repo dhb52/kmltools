@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'maindlg.ui'
-#
-# Created: Sat Sep 17 15:55:50 2016
-#      by: PyQt4 UI code generator 4.10.1
-#
-# WARNING! All changes made in this file will be lost!
-
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
 import sys
 import traceback
 import os.path
 import ui_maindlg
 import geo_tools
+
+USING_PYQT = 5
+try:
+    from PyQt5 import QtWidgets
+    from PyQt5 import QtCore
+except ImportError:
+    from PyQt4 import QtGui as QtWidgets
+    from PyQt5 import QtCore
+    USING_PYQT = 4
 
 
 class MainDlg(QtWidgets.QTabWidget, ui_maindlg.Ui_mainDlg):
@@ -22,22 +22,32 @@ class MainDlg(QtWidgets.QTabWidget, ui_maindlg.Ui_mainDlg):
         self.setupUi(self)
 
     def pointFileChosen(self):
-        fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self,
-                                                            "Please choose the POINT file",
-                                                            "",
-                                                            "Keyhole Markup Language (*.kml *.kmz)",
-                                                            None,
-                                                            QtWidgets.QFileDialog.Options())
+        answer = QtWidgets.QFileDialog.getOpenFileName(self,
+                                                       "Please choose the POINT file",
+                                                       "",
+                                                       "Keyhole Markup Language (*.kml *.kmz)",
+                                                       None,
+                                                       QtWidgets.QFileDialog.Options())
+        if USING_PYQT == 5:
+            fileName, _ = answer
+        else:
+            fileName = answer
+
         if fileName:
             self.txtPointFilePath.setText(fileName)
 
     def polygonFileChosen(self):
-        fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self,
-                                                            "Please choose the POLYGON file",
-                                                            "",
-                                                            "Keyhole Markup Language (*.kml *.kmz)",
-                                                            None,
-                                                            QtWidgets.QFileDialog.Options())
+        answer = QtWidgets.QFileDialog.getOpenFileName(self,
+                                                       "Please choose the POLYGON file",
+                                                       "",
+                                                       "Keyhole Markup Language (*.kml *.kmz)",
+                                                       None,
+                                                       QtWidgets.QFileDialog.Options())
+        if USING_PYQT == 5:
+            fileName, _ = answer
+        else:
+            fileName = answer
+
         if fileName:
             self.txtPolygonFilePath.setText(fileName)
 
@@ -72,12 +82,17 @@ class MainDlg(QtWidgets.QTabWidget, ui_maindlg.Ui_mainDlg):
             QtWidgets.QApplication.restoreOverrideCursor()
 
     def areaFileChosen(self):
-        fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self,
-                                                            "Please choose the POLYGON file",
-                                                            "",
-                                                            "Keyhole Markup Language (*.kml *.kmz)",
-                                                            None,
-                                                            QtWidgets.QFileDialog.Options())
+        answer = QtWidgets.QFileDialog.getOpenFileName(self,
+                                                       "Please choose the POLYGON file",
+                                                       "",
+                                                       "Keyhole Markup Language (*.kml *.kmz)",
+                                                       None,
+                                                       QtWidgets.QFileDialog.Options())
+        if USING_PYQT == 5:
+            fileName, _ = answer
+        else:
+            fileName = answer
+
         if fileName:
             self.txtAreaFilePath.setText(fileName)
 
@@ -110,12 +125,16 @@ class MainDlg(QtWidgets.QTabWidget, ui_maindlg.Ui_mainDlg):
             QtWidgets.QApplication.restoreOverrideCursor()
 
     def lineFileChosen(self):
-        fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self,
-                                                            "Please choose the POLYGON file",
-                                                            "",
-                                                            "Keyhole Markup Language (*.kml *.kmz)",
-                                                            None,
-                                                            QtWidgets.QFileDialog.Options())
+        answer = QtWidgets.QFileDialog.getOpenFileName(self,
+                                                       "Please choose the POLYGON file",
+                                                       "",
+                                                       "Keyhole Markup Language (*.kml *.kmz)",
+                                                       None,
+                                                       QtWidgets.QFileDialog.Options())
+        if USING_PYQT == 5:
+            fileName, _ = answer
+        else:
+            fileName = answer
         if fileName:
             self.txtLineFilePath.setText(fileName)
 
