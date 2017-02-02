@@ -1,12 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# import sys
-# reload(sys)
-# sys.setdefaultencoding("utf-8")
-
 import zipfile
-
 import io
 from fastkml import kml
 from fastkml import geometry
@@ -14,20 +9,13 @@ from geographiclib.geodesic import Geodesic
 
 
 __all__ = [
-    'load_data',
+    'load_points',
     'load_polygons',
     'load_lines',
     'points_inside_info',
     'calc_poly_areas',
     'calc_line_length',
 ]
-
-
-class GeoObj(object):
-    def __init__(self, name, path, geo):
-        self.name = name
-        self.path = path
-        self.geo = geo
 
 
 class GeoPolygon:
@@ -68,7 +56,7 @@ def point_in_poly(x, y, poly):
     return inside
 
 
-def find_features(result, element, feature_type, path=""):
+def _find_features(result, element, feature_type, path=""):
     new_path = path
     if not getattr(element, 'features', None):
         return
@@ -79,7 +67,8 @@ def find_features(result, element, feature_type, path=""):
             new_path = '/'.join((path, feature.name))
         elif isinstance(feature, kml.Placemark):
             if feature_type == geometry.Polygon and isinstance(feature.geometry, feature_type):
-                coords = [(p[0], p[1]) for p in feature.geometry.exterior.coords]
+                coords = [(p[0], p[1])
+                          for p in feature.geometry.exterior.coords]
                 poly = GeoPolygon(feature.name, path, coords)
                 result.append(poly)
             elif feature_type == geometry.Point and isinstance(feature.geometry, feature_type):
@@ -88,28 +77,16 @@ def find_features(result, element, feature_type, path=""):
             elif feature_type == geometry.LineString and isinstance(feature.geometry, feature_type):
                 line = GeoLine(feature.name, path, feature.geometry.coords)
                 result.append(line)
-        find_features(result, feature, feature_type, new_path)
+        _find_features(result, feature, feature_type, new_path)
 
 
-def polygon_area(coordinates):
-    from geographiclib.geodesic import Geodesic
+def _polygon_area(coordinates):
     geod = Geodesic.WGS84
-    # lon, lat = zip(*coordinates)
     p = geod.Polygon()
     for lon, lat in coordinates:
-        p.AddPoint(lat, lon)  # AddPoint(lat, lon)
+        p.AddPoint(lat, lon)
     _, _, area = p.Compute()
     return area
-
-
-# def _detect_enc(path):
-#     detector = UniversalDetector()
-#     for line in open(path).readlines():
-#         detector.feed(line)
-#         if detector.done: break
-
-#     detector.close()
-#     return detector.result['encoding']
 
 
 def _read_kml_from_file(file_path):
@@ -126,24 +103,36 @@ def _read_kml_from_file(file_path):
     return k
 
 
+def _line_length(coords):
+    geod = Geodesic.WGS84
+    cnt = len(coords)
+    length = 0.0
+    for i in range(cnt - 1):
+        p1_lon, p1_lat, _ = coords[i]
+        p2_lon, p2_lat, _ = coords[i + 1]
+        line = geod.Inverse(p1_lat, p1_lon, p2_lat, p2_lon)
+        length += line['s12']
+    return length
+
+
 def load_points(points_file):
     points = []
     k = _read_kml_from_file(points_file)
-    find_features(points, k, geometry.Point)
+    _find_features(points, k, geometry.Point)
     return points
 
 
 def load_polygons(polygons_file):
     polygons = []
     k = _read_kml_from_file(polygons_file)
-    find_features(polygons, k, geometry.Polygon)
+    _find_features(polygons, k, geometry.Polygon)
     return polygons
 
 
 def load_lines(line_file):
     lines = []
     k = _read_kml_from_file(line_file)
-    find_features(lines, k, geometry.LineString)
+    _find_features(lines, k, geometry.LineString)
     return lines
 
 
@@ -155,7 +144,7 @@ def load_data(points_file, polygons_file):
 
 def points_inside_info(points, polygons):
     result = io.StringIO()
-    result.write("POINT NAME,POINT FOLDER,POLYGON NAME, POLYGON FOLDER\n")
+    result.write("POINT NAME,POINT FOLDER,POLYGON NAME,POLYGON FOLDER\n")
     for point in points:
         x, y = point.coord.x, point.coord.y
         for poly in polygons:
@@ -169,30 +158,16 @@ def calc_poly_areas(polygons):
     result = io.StringIO()
     result.write("NAME,FOLDER,AREA(m^2)\n")
     for a in polygons:
-        area = polygon_area(a.coords)
-        # result.write("%s,%d" % (a.name, area)
+        area = _polygon_area(a.coords)
         result.write("%s,%s,%f\n" % (a.name, a.path, area))
     return result.getvalue()
-
-
-def line_length(coords):
-    geod = Geodesic.WGS84
-    cnt = len(coords)
-    length = 0.0
-    for i in range(cnt - 1):
-        p1_lon, p1_lat, _ = coords[i]
-        p2_lon, p2_lat, _ = coords[i + 1]
-        line = geod.Inverse(p1_lat, p1_lon, p2_lat, p2_lon)
-        length += line['s12']
-
-    return length
 
 
 def calc_line_length(lines):
     result = io.StringIO()
     result.write("NAME,FOLDER,LENGTH(m)\n")
     for a in lines:
-        length = line_length(a.coords)
+        length = _line_length(a.coords)
         result.write("%s,%s,%f\n" % (a.name, a.path, length))
     return result.getvalue()
 

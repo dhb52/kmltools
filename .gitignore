@@ -101,7 +101,9 @@ $RECYCLE.BIN/
 *.lnk
 *.kml
 *.kmz
-ui_maindlg.py
+
+# PyQt generated UI file
+ui_*.py
 
 # venv
 Scripts
