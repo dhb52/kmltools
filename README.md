@@ -39,4 +39,4 @@ Freeze the app
 python cx_freeze.py build_exe
 ```
 
-Copyright © 2016 Barry. Released under the GPLV3 License <http://gplv3.fsf.org/>.
+Copyright © 2016 Barry. Released under the [GPLV3 License](http://gplv3.fsf.org/).
