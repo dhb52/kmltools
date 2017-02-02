@@ -10,3 +10,31 @@ KML 传输规划支撑工具在传输规划方面，目前大部分规划人员�
 ##功能三：
 点面计算批量计算点在多边形的归属关系
 应用场景：计算点（4G站点、光交箱）在多边形（微网格、综合业务区）的归属关系。
+
+# Overview
+This package is created using python3 and PyQt5, and taking backward compatibility of python2 and PyQt4 into account.
+# Install steps
+## step 1
+create a virtual environment
+```
+python -m venv .
+Scripts\activate.bat
+```
+
+## step 2
+install the requiements 
+```
+pip install -r requirements.txt
+```
+
+## step 3
+generate the pyui file
+```
+pyuic5 maindlg.ui -o ui_maindlg.py
+```
+
+## step 4
+Freeze the app
+```
+python cx_freeze.py build_exe
+```
