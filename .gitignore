@@ -106,9 +106,10 @@ $RECYCLE.BIN/
 ui_*.py
 
 # venv
-Scripts
-Lib
-Include
+.venv
 pyvenv.cfg
 
 pip-selfcheck.json
+
+# Inno setup
+Output

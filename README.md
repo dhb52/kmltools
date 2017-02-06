@@ -17,8 +17,8 @@ This package is created using python3 and PyQt5, and taking backward compatibili
 ## step 1
 create a virtual environment
 ```
-python -m venv .
-Scripts\activate.bat
+python -m venv .venv
+.\venv\Scripts\activate.bat
 ```
 
 ## step 2
