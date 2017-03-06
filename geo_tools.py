@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 import zipfile
-import io
 from fastkml import kml
 from fastkml import geometry
 from geographiclib.geodesic import Geodesic
@@ -143,32 +146,32 @@ def load_data(points_file, polygons_file):
 
 
 def points_inside_info(points, polygons):
-    result = io.StringIO()
-    result.write("POINT NAME,POINT FOLDER,POLYGON NAME,POLYGON FOLDER\n")
+    result = StringIO()
+    result.write(u"POINT NAME,POINT FOLDER,POLYGON NAME,POLYGON FOLDER\n")
     for point in points:
         x, y = point.coord.x, point.coord.y
         for poly in polygons:
             if point_in_poly(x, y, poly.coords):
-                result.write("%s,%s,%s,%s\n" %
+                result.write(u"%s,%s,%s,%s\n" %
                              (point.name, point.path, poly.name, poly.path))
     return result.getvalue()
 
 
 def calc_poly_areas(polygons):
-    result = io.StringIO()
+    result = StringIO()
     result.write("NAME,FOLDER,AREA(m^2)\n")
     for a in polygons:
         area = _polygon_area(a.coords)
-        result.write("%s,%s,%f\n" % (a.name, a.path, area))
+        result.write(u"%s,%s,%f\n" % (a.name, a.path, area))
     return result.getvalue()
 
 
 def calc_line_length(lines):
-    result = io.StringIO()
-    result.write("NAME,FOLDER,LENGTH(m)\n")
+    result = StringIO()
+    result.write(u"NAME,FOLDER,LENGTH(m)\n")
     for a in lines:
         length = _line_length(a.coords)
-        result.write("%s,%s,%f\n" % (a.name, a.path, length))
+        result.write(u"%s,%s,%f\n" % (a.name, a.path, length))
     return result.getvalue()
 
 
