@@ -3,7 +3,6 @@
 
 import traceback
 import os.path
-import ui_maindlg
 import geo_tools
 
 try:
@@ -11,13 +10,16 @@ try:
         QTabWidget, QFileDialog, QApplication, QMessageBox)
     from PyQt5 import QtCore
     PYQT_VER = 5
+
     def unicode(s):
         return s
+    from ui_maindlg5 import Ui_mainDlg
 except ImportError:
     from PyQt4.QtGui import (
         QTabWidget, QFileDialog, QApplication, QMessageBox)
     from PyQt4 import QtCore
     PYQT_VER = 4
+    from ui_maindlg4 import Ui_mainDlg
 
 
 def getOpenFileName(*args):
@@ -29,7 +31,7 @@ def getOpenFileName(*args):
         return fileName
 
 
-class MainDlg(QTabWidget, ui_maindlg.Ui_mainDlg):
+class MainDlg(QTabWidget, Ui_mainDlg):
 
     def __init__(self, parent=None):
         super(MainDlg, self).__init__(parent)
@@ -39,9 +41,7 @@ class MainDlg(QTabWidget, ui_maindlg.Ui_mainDlg):
         fileName = getOpenFileName(self,
                                    "Please choose the POINT file",
                                    "",
-                                   "Keyhole Markup Language (*.kml *.kmz)",
-                                   None,
-                                   QFileDialog.Options())
+                                   "Keyhole Markup Language (*.kml *.kmz)")
 
         if fileName:
             self.txtPointFilePath.setText(fileName)
@@ -50,9 +50,7 @@ class MainDlg(QTabWidget, ui_maindlg.Ui_mainDlg):
         fileName = getOpenFileName(self,
                                    "Please choose the POLYGON file",
                                    "",
-                                   "Keyhole Markup Language (*.kml *.kmz)",
-                                   None,
-                                   QFileDialog.Options())
+                                   "Keyhole Markup Language (*.kml *.kmz)")
 
         if fileName:
             self.txtPolygonFilePath.setText(fileName)
@@ -91,9 +89,7 @@ class MainDlg(QTabWidget, ui_maindlg.Ui_mainDlg):
         fileName = getOpenFileName(self,
                                    "Please choose the POLYGON file",
                                    "",
-                                   "Keyhole Markup Language (*.kml *.kmz)",
-                                   None,
-                                   QFileDialog.Options())
+                                   "Keyhole Markup Language (*.kml *.kmz)")
 
         if fileName:
             self.txtAreaFilePath.setText(fileName)
@@ -130,9 +126,7 @@ class MainDlg(QTabWidget, ui_maindlg.Ui_mainDlg):
         fileName = getOpenFileName(self,
                                    "Please choose the POLYGON file",
                                    "",
-                                   "Keyhole Markup Language (*.kml *.kmz)",
-                                   None,
-                                   QFileDialog.Options())
+                                   "Keyhole Markup Language (*.kml *.kmz)")
 
         if fileName:
             self.txtLineFilePath.setText(fileName)
