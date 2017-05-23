@@ -106,7 +106,7 @@ $RECYCLE.BIN/
 ui_*.py
 
 # venv
-.venv
+venv
 pyvenv.cfg
 
 pip-selfcheck.json
