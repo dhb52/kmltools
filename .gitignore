@@ -107,6 +107,8 @@ ui_*.py
 
 # venv
 venv
+env
+env7
 pyvenv.cfg
 
 pip-selfcheck.json
