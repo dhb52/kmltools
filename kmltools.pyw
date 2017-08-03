@@ -159,6 +159,43 @@ class MainDlg(QTabWidget, Ui_mainDlg):
         finally:
             QApplication.restoreOverrideCursor()
 
+    def areaIntersectionFileChosen(self):
+        fileName = getOpenFileName(self,
+                                   "Please choose the POLYGON file",
+                                   "",
+                                   "Keyhole Markup Language (*.kml *.kmz)")
+
+        if fileName:
+            self.txtAreaIntersectionFilePath.setText(fileName)
+
+    def doCalculateAreaIntersection(self):
+        areaFileName = unicode(self.txtAreaIntersectionFilePath.text())
+        if not os.path.exists(areaFileName):
+            QMessageBox.critical(
+                None,
+                'File not found',
+                'Please choose your input file',
+                QMessageBox.Ok)
+            return
+
+        self.txtAreaResult.setPlainText("")
+        QApplication.processEvents()
+
+        try:
+            QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
+            polygons = geo_tools.load_polygons(areaFileName)
+            result = geo_tools.calc_area_intersection_area(polygons)
+            self.txtAreaIntersectionResult.setPlainText(result)
+        except:
+            msg = traceback.format_exc()
+            QMessageBox.critical(
+                None,
+                "Error",
+                msg,
+                QMessageBox.Ok)
+        finally:
+            QApplication.restoreOverrideCursor()
+
 
 def main():
     import sys

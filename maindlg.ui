@@ -18,7 +18,7 @@
     <normaloff>app.ico</normaloff>app.ico</iconset>
   </property>
   <property name="currentIndex">
-   <number>1</number>
+   <number>3</number>
   </property>
   <widget class="QWidget" name="tab">
    <attribute name="title">
@@ -246,6 +246,72 @@
     </item>
    </layout>
   </widget>
+  <widget class="QWidget" name="tab_3">
+   <attribute name="title">
+    <string>重叠面积计算</string>
+   </attribute>
+   <layout class="QVBoxLayout" name="verticalLayout_4">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_6">
+      <item>
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>面图层文件</string>
+        </property>
+        <property name="buddy">
+         <cstring>txtPolygonFilePath</cstring>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="txtAreaIntersectionFilePath">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnChooseAreaIntersectionFile">
+        <property name="text">
+         <string>选择文件</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_9">
+      <item>
+       <spacer name="horizontalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>926</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnCalculateAreaIntersection">
+        <property name="text">
+         <string>计算</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QPlainTextEdit" name="txtAreaIntersectionResult">
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
  </widget>
  <resources/>
  <connections>
@@ -336,8 +402,8 @@
    <slot>doCalculateLength()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>902</x>
-     <y>74</y>
+     <x>938</x>
+     <y>85</y>
     </hint>
     <hint type="destinationlabel">
      <x>496</x>
@@ -352,12 +418,44 @@
    <slot>lineFileChosen()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>882</x>
-     <y>43</y>
+     <x>938</x>
+     <y>54</y>
     </hint>
     <hint type="destinationlabel">
      <x>646</x>
      <y>-9</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnCalculateAreaIntersection</sender>
+   <signal>clicked()</signal>
+   <receiver>mainDlg</receiver>
+   <slot>doCalculateAreaIntersection()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>908</x>
+     <y>74</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>492</x>
+     <y>62</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnChooseAreaIntersectionFile</sender>
+   <signal>clicked()</signal>
+   <receiver>mainDlg</receiver>
+   <slot>areaIntersectionFileChosen()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>910</x>
+     <y>38</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>526</x>
+     <y>9</y>
     </hint>
    </hints>
   </connection>
@@ -370,5 +468,7 @@
   <slot>doCalculateArea()</slot>
   <slot>doCalculateLength()</slot>
   <slot>lineFileChosen()</slot>
+  <slot>areaIntersectionFileChosen()</slot>
+  <slot>doCalculateAreaIntersection()</slot>
  </slots>
 </ui>

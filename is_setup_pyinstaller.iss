@@ -7,13 +7,13 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{0D347012-E9CC-4CD1-A876-41BE81179DBE}}
 AppName=kmltools
-AppVersion=3.1.0
+AppVersion=3.2.0
 ;AppVerName=dgStaff Query Tool 1.0.1
 AppPublisher=Barry, Co.
 DefaultDirName={pf}\kmltools
 DefaultGroupName=KML Tools
 AllowNoIcons=yes
-OutputBaseFilename="kmltools-py2-qt4-setup_v3.1.0"
+OutputBaseFilename="kmltools-py2-qt4-setup_v3.2.0"
 Compression=lzma
 SolidCompression=yes
 

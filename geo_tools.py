@@ -175,6 +175,29 @@ def calc_line_length(lines):
     return result.getvalue()
 
 
+def calc_area_intersection_area(polygons):
+    from shapely.geometry import Polygon as ShapelyPolygon
+    from shapely.geometry.polygon import Polygon as ShapelyPolygonType
+
+    result = StringIO()
+    result.write(
+        u"POLYGON NAME1,POLYGON FOLDER1,POLYGON NAME2,POLYGON FOLDER2,AREA(m^2)\n")
+    for i, p1 in enumerate(polygons):
+        shapely_p1 = ShapelyPolygon(p1.coords)
+        for p2 in polygons[i + 1:]:
+            shapely_p2 = ShapelyPolygon(p2.coords)
+            inter = None
+            try:
+                inter = shapely_p1.intersection(shapely_p2)
+            except:
+                pass
+            if isinstance(inter, ShapelyPolygonType):
+                area = _polygon_area(inter.exterior.coords)
+                result.write(u"%s,%s,%s,%s,%f\n" %
+                             (p1.name, p1.path, p2.name, p2.path, -area))
+
+    return result.getvalue()
+
 if __name__ == '__main__':
     points, polygons = load_data('points.kml', 'areas.kml')
     print(points_inside_info(points, polygons))
