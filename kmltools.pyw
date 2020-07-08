@@ -1,19 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os.path
 import sys
 import traceback
-import os.path
-import geo_tools
 
-# pylint: disable
-from PyQt5.QtWidgets import QTabWidget, QFileDialog, QApplication, QMessageBox
+# pylint: disable=no-name-in-module
 from PyQt5 import QtCore
 from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QApplication, QFileDialog, QMessageBox, QTabWidget
 
-from ui_maindlg5 import Ui_MainDlg
-
+import geo_tools
 import rc_resource
+from ui_maindlg5 import Ui_MainDlg
 
 
 class MainDlg(QTabWidget, Ui_MainDlg):
@@ -164,12 +163,8 @@ class MainDlg(QTabWidget, Ui_MainDlg):
             QApplication.restoreOverrideCursor()
 
 
-def main():
+if __name__ == "__main__":
     app = QApplication(sys.argv)
     dialog = MainDlg()
     dialog.show()
     sys.exit(app.exec_())
-
-
-if __name__ == "__main__":
-    main()
