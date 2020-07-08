@@ -1,166 +1,52 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-import os.path
 import sys
-import traceback
 
 # pylint: disable=no-name-in-module
-from PyQt5 import QtCore
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QApplication, QFileDialog, QMessageBox, QTabWidget
+from PyQt5.QtWidgets import (
+    QApplication,
+    QHBoxLayout,
+    QLabel,
+    QTabWidget,
+    QVBoxLayout,
+    QWidget,
+)
 
-import geo_tools
-import rc_resource
-from ui_maindlg5 import Ui_MainDlg
+import tab1, tab2, tab3, tab4, tab5
 
 
-class MainDlg(QTabWidget, Ui_MainDlg):
+class MyTabWidget(QTabWidget):
+    def __init__(self, parent=None):
+        super(MyTabWidget, self).__init__(parent)
+        self.setupUi()
+
+    def setupUi(self):
+        self.addTab(tab1.Tab(), tab1.Tab.name)
+        self.addTab(tab2.Tab(), tab2.Tab.name)
+        self.addTab(tab3.Tab(), tab3.Tab.name)
+        self.addTab(tab4.Tab(), tab4.Tab.name)
+        self.addTab(tab5.Tab(), tab5.Tab.name)
+
+
+class MainDlg(QWidget):
     def __init__(self, parent=None):
         super(MainDlg, self).__init__(parent)
-        self.setupUi(self)
+        self.setupUi()
+
+    def setupUi(self):
+        tabWidget = MyTabWidget()
+        vbox = QVBoxLayout()
+        vbox.addWidget(tabWidget)
+
+        labelCopyright = QLabel("© dinghaibin@gd.cmcc")
+        hbox = QHBoxLayout()
+        hbox.addStretch(1)
+        hbox.addWidget(labelCopyright)
+        vbox.addLayout(hbox)
+
+        self.setLayout(vbox)
+        self.setWindowTitle("KML规划工具")
+        self.setGeometry(300, 300, 800, 600)
         self.setWindowIcon(QIcon(":/app.ico"))
-
-    def pointFileChosen(self):
-        fileName, _ = QFileDialog.getOpenFileName(
-            self, "选择点图层文件", "", "KML文件 (*.kml *.kmz)",
-        )
-        if fileName:
-            self.txtPointFilePath.setText(fileName)
-
-    def polygonFileChosen(self):
-        fileName, _ = QFileDialog.getOpenFileName(
-            self, "选择多边形图层文件", "", "KML文件 (*.kml *.kmz)",
-        )
-        if fileName:
-            self.txtPolygonFilePath.setText(fileName)
-
-    def pointsOutFileChosen(self):
-        fileName, _ = QFileDialog.getOpenFileName(
-            self, "选择多边形图层文件", "", "KML文件 (*.kml *.kmz)",
-        )
-        if fileName:
-            self.txtPointsOutFilePath.setText(fileName)
-
-    def doCalculate(self):
-        polygonFileName = self.txtPolygonFilePath.text()
-        pointFileName = self.txtPointFilePath.text()
-        if not (os.path.exists(polygonFileName) and os.path.exists(pointFileName)):
-            QMessageBox.critical(None, "找不到文件", "请重新选择文件", QMessageBox.Ok)
-            return
-
-        self.txtResult.setPlainText("")
-        QApplication.processEvents()
-
-        try:
-            QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
-            points, polygons = geo_tools.load_data(pointFileName, polygonFileName)
-            result = geo_tools.points_inside_info(points, polygons)
-            self.txtResult.setPlainText(result)
-        except:
-            msg = traceback.format_exc()
-            QMessageBox.critical(None, "错误", msg, QMessageBox.Ok)
-        finally:
-            QApplication.restoreOverrideCursor()
-
-    def areaFileChosen(self):
-        fileName, _ = QFileDialog.getOpenFileName(
-            self, "选择多边形图层文件", "", "KML文件 (*.kml *.kmz)",
-        )
-        if fileName:
-            self.txtAreaFilePath.setText(fileName)
-
-    def doCalculateArea(self):
-        areaFileName = self.txtAreaFilePath.text()
-        if not os.path.exists(areaFileName):
-            QMessageBox.critical(None, "找不到文件", "请重新选择文件", QMessageBox.Ok)
-            return
-
-        self.txtAreaResult.setPlainText("")
-        QApplication.processEvents()
-
-        try:
-            QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
-            polygons = geo_tools.load_polygons(areaFileName)
-            result = geo_tools.calc_poly_areas(polygons)
-            self.txtAreaResult.setPlainText(result)
-        except:
-            msg = traceback.format_exc()
-            QMessageBox.critical(None, "错误", msg, QMessageBox.Ok)
-        finally:
-            QApplication.restoreOverrideCursor()
-
-    def lineFileChosen(self):
-        fileName, _ = QFileDialog.getOpenFileName(
-            self, "选择连线的图层文件", "", "KML文件 (*.kml *.kmz)",
-        )
-        if fileName:
-            self.txtLineFilePath.setText(fileName)
-
-    def doCalculateLength(self):
-        lineFileName = self.txtLineFilePath.text()
-        if not os.path.exists(lineFileName):
-            QMessageBox.critical(None, "找不到文件", "请重新选择文件", QMessageBox.Ok)
-            return
-
-        self.txtLengthResult.setPlainText("")
-        QApplication.processEvents()
-
-        try:
-            QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
-            lines = geo_tools.load_lines(lineFileName)
-            result = geo_tools.calc_line_length(lines)
-            self.txtLengthResult.setPlainText(result)
-        except:
-            msg = traceback.format_exc()
-            QMessageBox.critical(None, "错误", msg, QMessageBox.Ok)
-        finally:
-            QApplication.restoreOverrideCursor()
-
-    def areaIntersectionFileChosen(self):
-        fileName, _ = QFileDialog.getOpenFileName(
-            self, "选择多边形图层文件", "", "KML文件 (*.kml *.kmz)",
-        )
-        if fileName:
-            self.txtAreaIntersectionFilePath.setText(fileName)
-
-    def doCalculateAreaIntersection(self):
-        areaFileName = self.txtAreaIntersectionFilePath.text()
-        if not os.path.exists(areaFileName):
-            QMessageBox.critical(None, "找不到文件", "请重新选择文件", QMessageBox.Ok)
-            return
-
-        self.txtAreaResult.setPlainText("")
-        QApplication.processEvents()
-
-        try:
-            QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
-            polygons = geo_tools.load_polygons(areaFileName)
-            result = geo_tools.calc_area_intersection_area(polygons)
-            self.txtAreaIntersectionResult.setPlainText(result)
-        except:
-            msg = traceback.format_exc()
-            QMessageBox.critical(None, "错误", msg, QMessageBox.Ok)
-        finally:
-            QApplication.restoreOverrideCursor()
-
-    def doOutputPoints(self):
-        pointsFileName = self.txtPointsOutFilePath.text()
-        if not os.path.exists(pointsFileName):
-            QMessageBox.critical(None, "找不到文件", "请重新选择文件", QMessageBox.Ok)
-            return
-
-        self.txPointOutResult.setPlainText("")
-        try:
-            QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
-            points = geo_tools.load_points(pointsFileName)
-            result = geo_tools.points_to_csv(points)
-            self.txPointOutResult.setPlainText(result)
-        except:
-            msg = traceback.format_exc()
-            QMessageBox.critical(None, "错误", msg, QMessageBox.Ok)
-        finally:
-            QApplication.restoreOverrideCursor()
 
 
 if __name__ == "__main__":
