@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>mainDlg</class>
- <widget class="QTabWidget" name="mainDlg">
+ <class>MainDlg</class>
+ <widget class="QTabWidget" name="MainDlg">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -13,12 +13,8 @@
   <property name="windowTitle">
    <string>KML规划工具</string>
   </property>
-  <property name="windowIcon">
-   <iconset>
-    <normaloff>app.ico</normaloff>app.ico</iconset>
-  </property>
   <property name="currentIndex">
-   <number>3</number>
+   <number>0</number>
   </property>
   <widget class="QWidget" name="tab">
    <attribute name="title">
@@ -318,7 +314,7 @@
   <connection>
    <sender>btnChoosePointFile</sender>
    <signal>clicked()</signal>
-   <receiver>mainDlg</receiver>
+   <receiver>MainDlg</receiver>
    <slot>pointFileChosen()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -334,7 +330,7 @@
   <connection>
    <sender>btnChoosePolygonFile</sender>
    <signal>clicked()</signal>
-   <receiver>mainDlg</receiver>
+   <receiver>MainDlg</receiver>
    <slot>polygonFileChosen()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -350,7 +346,7 @@
   <connection>
    <sender>btnCalculate</sender>
    <signal>clicked()</signal>
-   <receiver>mainDlg</receiver>
+   <receiver>MainDlg</receiver>
    <slot>doCalculate()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -366,7 +362,7 @@
   <connection>
    <sender>btnChooseAreaFile</sender>
    <signal>clicked()</signal>
-   <receiver>mainDlg</receiver>
+   <receiver>MainDlg</receiver>
    <slot>areaFileChosen()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -382,7 +378,7 @@
   <connection>
    <sender>btnCalculateArea</sender>
    <signal>clicked()</signal>
-   <receiver>mainDlg</receiver>
+   <receiver>MainDlg</receiver>
    <slot>doCalculateArea()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -398,7 +394,7 @@
   <connection>
    <sender>btnCalculateLength</sender>
    <signal>clicked()</signal>
-   <receiver>mainDlg</receiver>
+   <receiver>MainDlg</receiver>
    <slot>doCalculateLength()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -414,7 +410,7 @@
   <connection>
    <sender>btnChooseLineFile</sender>
    <signal>clicked()</signal>
-   <receiver>mainDlg</receiver>
+   <receiver>MainDlg</receiver>
    <slot>lineFileChosen()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -430,7 +426,7 @@
   <connection>
    <sender>btnCalculateAreaIntersection</sender>
    <signal>clicked()</signal>
-   <receiver>mainDlg</receiver>
+   <receiver>MainDlg</receiver>
    <slot>doCalculateAreaIntersection()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -446,7 +442,7 @@
   <connection>
    <sender>btnChooseAreaIntersectionFile</sender>
    <signal>clicked()</signal>
-   <receiver>mainDlg</receiver>
+   <receiver>MainDlg</receiver>
    <slot>areaIntersectionFileChosen()</slot>
    <hints>
     <hint type="sourcelabel">

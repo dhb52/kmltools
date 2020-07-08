@@ -1,23 +1,23 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
+
+from io import StringIO
 import zipfile
 from fastkml import kml
 from fastkml import geometry
 from geographiclib.geodesic import Geodesic
+from shapely.geometry import Polygon as ShapelyPolygon
+from shapely.geometry.polygon import Polygon as ShapelyPolygonType
 
 
 __all__ = [
-    'load_points',
-    'load_polygons',
-    'load_lines',
-    'points_inside_info',
-    'calc_poly_areas',
-    'calc_line_length',
+    "load_points",
+    "load_polygons",
+    "load_lines",
+    "points_inside_info",
+    "calc_poly_areas",
+    "calc_line_length",
 ]
 
 
@@ -61,23 +61,28 @@ def point_in_poly(x, y, poly):
 
 def _find_features(result, element, feature_type, path=""):
     new_path = path
-    if not getattr(element, 'features', None):
+    if not getattr(element, "features", None):
         return
     for feature in element.features():
         if isinstance(feature, kml.Folder):
             if not feature.name:
                 feature.name = ""
-            new_path = '/'.join((path, feature.name))
+            new_path = "/".join((path, feature.name))
         elif isinstance(feature, kml.Placemark):
-            if feature_type == geometry.Polygon and isinstance(feature.geometry, feature_type):
-                coords = [(p[0], p[1])
-                          for p in feature.geometry.exterior.coords]
+            if feature_type == geometry.Polygon and isinstance(
+                feature.geometry, feature_type
+            ):
+                coords = [(p[0], p[1]) for p in feature.geometry.exterior.coords]
                 poly = GeoPolygon(feature.name, path, coords)
                 result.append(poly)
-            elif feature_type == geometry.Point and isinstance(feature.geometry, feature_type):
+            elif feature_type == geometry.Point and isinstance(
+                feature.geometry, feature_type
+            ):
                 point = GeoPoint(feature.name, path, feature.geometry)
                 result.append(point)
-            elif feature_type == geometry.LineString and isinstance(feature.geometry, feature_type):
+            elif feature_type == geometry.LineString and isinstance(
+                feature.geometry, feature_type
+            ):
                 line = GeoLine(feature.name, path, feature.geometry.coords)
                 result.append(line)
         _find_features(result, feature, feature_type, new_path)
@@ -95,11 +100,11 @@ def _polygon_area(coordinates):
 def _read_kml_from_file(file_path):
     k = kml.KML()
     xml = None
-    if file_path.lower().endswith('.kmz'):
-        with zipfile.ZipFile(file_path, 'r') as zf:
+    if file_path.lower().endswith(".kmz"):
+        with zipfile.ZipFile(file_path, "r") as zf:
             xml = zf.read("doc.kml")
     else:
-        with open(file_path, 'rb') as kmlFile:
+        with open(file_path, "rb") as kmlFile:
             xml = kmlFile.read()
 
     k.from_string(xml)
@@ -114,7 +119,7 @@ def _line_length(coords):
         p1_lon, p1_lat, _ = coords[i]
         p2_lon, p2_lat, _ = coords[i + 1]
         line = geod.Inverse(p1_lat, p1_lon, p2_lat, p2_lon)
-        length += line['s12']
+        length += line["s12"]
     return length
 
 
@@ -147,19 +152,20 @@ def load_data(points_file, polygons_file):
 
 def points_inside_info(points, polygons):
     result = StringIO()
-    result.write(u"POINT NAME,POINT FOLDER,POLYGON NAME,POLYGON FOLDER\n")
+    result.write(u"点名称,点所在目录,多边形名称,多边形所在目录\n")
     for point in points:
         x, y = point.coord.x, point.coord.y
         for poly in polygons:
             if point_in_poly(x, y, poly.coords):
-                result.write(u"%s,%s,%s,%s\n" %
-                             (point.name, point.path, poly.name, poly.path))
+                result.write(
+                    u"%s,%s,%s,%s\n" % (point.name, point.path, poly.name, poly.path)
+                )
     return result.getvalue()
 
 
 def calc_poly_areas(polygons):
     result = StringIO()
-    result.write("NAME,FOLDER,AREA(m^2)\n")
+    result.write("名称,所在目录,面积(平方)\n")
     for a in polygons:
         area = _polygon_area(a.coords)
         result.write(u"%s,%s,%f\n" % (a.name, a.path, area))
@@ -168,7 +174,7 @@ def calc_poly_areas(polygons):
 
 def calc_line_length(lines):
     result = StringIO()
-    result.write(u"NAME,FOLDER,LENGTH(m)\n")
+    result.write(u"名称,所在目录,长度(米)\n")
     for a in lines:
         length = _line_length(a.coords)
         result.write(u"%s,%s,%f\n" % (a.name, a.path, length))
@@ -176,15 +182,12 @@ def calc_line_length(lines):
 
 
 def calc_area_intersection_area(polygons):
-    from shapely.geometry import Polygon as ShapelyPolygon
-    from shapely.geometry.polygon import Polygon as ShapelyPolygonType
 
     result = StringIO()
-    result.write(
-        u"POLYGON NAME1,POLYGON FOLDER1,POLYGON NAME2,POLYGON FOLDER2,AREA(m^2)\n")
+    result.write(u"多边形1,多边形1所在目录,多边形2,多边形2所在目录,重叠面积(平方)\n")
     for i, p1 in enumerate(polygons):
         shapely_p1 = ShapelyPolygon(p1.coords)
-        for p2 in polygons[i + 1:]:
+        for p2 in polygons[i + 1 :]:
             shapely_p2 = ShapelyPolygon(p2.coords)
             inter = None
             try:
@@ -193,12 +196,14 @@ def calc_area_intersection_area(polygons):
                 pass
             if isinstance(inter, ShapelyPolygonType):
                 area = _polygon_area(inter.exterior.coords)
-                result.write(u"%s,%s,%s,%s,%f\n" %
-                             (p1.name, p1.path, p2.name, p2.path, -area))
+                result.write(
+                    u"%s,%s,%s,%s,%f\n" % (p1.name, p1.path, p2.name, p2.path, -area)
+                )
 
     return result.getvalue()
 
-if __name__ == '__main__':
-    points, polygons = load_data('points.kml', 'areas.kml')
+
+if __name__ == "__main__":
+    points, polygons = load_data("points.kml", "areas.kml")
     print(points_inside_info(points, polygons))
     print(calc_poly_areas(polygons))

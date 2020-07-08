@@ -30,16 +30,11 @@ pip install -r requirements.txt
 ## step 3
 generate the pyui file
 ```
-pyuic5 maindlg.ui -o ui_maindlg.py
+pyuic5 maindlg.ui -o ui_maindlg5.py
 ```
 
 ## step 4
-Freeze the app
-```
-python cx_freeze.py build_exe
-```
-
-Or you can using pyinstaller
+Bundle the app
 ```
 pyinstaller kmltools.pyw -i app.ico --add-data app.ico;. -w
 ```

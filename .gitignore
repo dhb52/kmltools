@@ -104,6 +104,7 @@ $RECYCLE.BIN/
 
 # PyQt generated UI file
 ui_*.py
+rc_*.py
 
 # venv
 venv
@@ -112,6 +113,9 @@ env7
 pyvenv.cfg
 
 pip-selfcheck.json
+
+# vscode
+.vscode
 
 # Inno setup
 Output

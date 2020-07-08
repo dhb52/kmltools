@@ -1,69 +1,48 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import sys
 import traceback
 import os.path
 import geo_tools
 
-try:
-    from PyQt5.QtWidgets import (
-        QTabWidget, QFileDialog, QApplication, QMessageBox)
-    from PyQt5 import QtCore
-    PYQT_VER = 5
+# pylint: disable
+from PyQt5.QtWidgets import QTabWidget, QFileDialog, QApplication, QMessageBox
+from PyQt5 import QtCore
+from PyQt5.QtGui import QIcon
 
-    def unicode(s):
-        return s
-    from ui_maindlg5 import Ui_mainDlg
-except ImportError:
-    from PyQt4.QtGui import (
-        QTabWidget, QFileDialog, QApplication, QMessageBox)
-    from PyQt4 import QtCore
-    PYQT_VER = 4
-    from ui_maindlg4 import Ui_mainDlg
+from ui_maindlg5 import Ui_MainDlg
+
+import rc_resource
 
 
-def getOpenFileName(*args):
-    if PYQT_VER == 5:
-        fileName, _ = QFileDialog.getOpenFileName(*args)
-        return fileName
-    else:
-        fileName = QFileDialog.getOpenFileName(*args)
-        return fileName
-
-
-class MainDlg(QTabWidget, Ui_mainDlg):
-
+class MainDlg(QTabWidget, Ui_MainDlg):
     def __init__(self, parent=None):
         super(MainDlg, self).__init__(parent)
         self.setupUi(self)
+        self.setWindowIcon(QIcon(':/app.ico'))
 
     def pointFileChosen(self):
-        fileName = getOpenFileName(self,
-                                   "Please choose the POINT file",
-                                   "",
-                                   "Keyhole Markup Language (*.kml *.kmz)")
+        fileName, _ = QFileDialog.getOpenFileName(
+            self, "选择点图层文件", "", "KML文件 (*.kml *.kmz)",
+        )
 
         if fileName:
             self.txtPointFilePath.setText(fileName)
 
     def polygonFileChosen(self):
-        fileName = getOpenFileName(self,
-                                   "Please choose the POLYGON file",
-                                   "",
-                                   "Keyhole Markup Language (*.kml *.kmz)")
+        fileName, _ = QFileDialog.getOpenFileName(
+            self, "选择多边形图层文件", "", "KML文件 (*.kml *.kmz)",
+        )
 
         if fileName:
             self.txtPolygonFilePath.setText(fileName)
 
     def doCalculate(self):
-        polygonFileName = unicode(self.txtPolygonFilePath.text())
-        pointFileName = unicode(self.txtPointFilePath.text())
+        polygonFileName = self.txtPolygonFilePath.text()
+        pointFileName = self.txtPointFilePath.text()
         if not (os.path.exists(polygonFileName) and os.path.exists(pointFileName)):
-            QMessageBox.critical(
-                None,
-                'File not found',
-                'Please choose your input file',
-                QMessageBox.Ok)
+            QMessageBox.critical(None, "找不到文件", "请重新选择文件", QMessageBox.Ok)
             return
 
         self.txtResult.setPlainText("")
@@ -71,37 +50,27 @@ class MainDlg(QTabWidget, Ui_mainDlg):
 
         try:
             QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
-            points, polygons = geo_tools.load_data(
-                pointFileName, polygonFileName)
+            points, polygons = geo_tools.load_data(pointFileName, polygonFileName)
             result = geo_tools.points_inside_info(points, polygons)
             self.txtResult.setPlainText(result)
         except:
             msg = traceback.format_exc()
-            QMessageBox.critical(
-                None,
-                "Error",
-                msg,
-                QMessageBox.Ok)
+            QMessageBox.critical(None, "错误", msg, QMessageBox.Ok)
         finally:
             QApplication.restoreOverrideCursor()
 
     def areaFileChosen(self):
-        fileName = getOpenFileName(self,
-                                   "Please choose the POLYGON file",
-                                   "",
-                                   "Keyhole Markup Language (*.kml *.kmz)")
+        fileName, _ = QFileDialog.getOpenFileName(
+            self, "选择多边形图层文件", "", "KML文件 (*.kml *.kmz)",
+        )
 
         if fileName:
             self.txtAreaFilePath.setText(fileName)
 
     def doCalculateArea(self):
-        areaFileName = unicode(self.txtAreaFilePath.text())
+        areaFileName = self.txtAreaFilePath.text()
         if not os.path.exists(areaFileName):
-            QMessageBox.critical(
-                None,
-                'File not found',
-                'Please choose your input file',
-                QMessageBox.Ok)
+            QMessageBox.critical(None, "找不到文件", "请重新选择文件", QMessageBox.Ok)
             return
 
         self.txtAreaResult.setPlainText("")
@@ -114,31 +83,22 @@ class MainDlg(QTabWidget, Ui_mainDlg):
             self.txtAreaResult.setPlainText(result)
         except:
             msg = traceback.format_exc()
-            QMessageBox.critical(
-                None,
-                "Error",
-                msg,
-                QMessageBox.Ok)
+            QMessageBox.critical(None, "错误", msg, QMessageBox.Ok)
         finally:
             QApplication.restoreOverrideCursor()
 
     def lineFileChosen(self):
-        fileName = getOpenFileName(self,
-                                   "Please choose the POLYGON file",
-                                   "",
-                                   "Keyhole Markup Language (*.kml *.kmz)")
+        fileName, _ = QFileDialog.getOpenFileName(
+            self, "选择连线的图层文件", "", "KML文件 (*.kml *.kmz)",
+        )
 
         if fileName:
             self.txtLineFilePath.setText(fileName)
 
     def doCalculateLength(self):
-        lineFileName = unicode(self.txtLineFilePath.text())
+        lineFileName = self.txtLineFilePath.text()
         if not os.path.exists(lineFileName):
-            QMessageBox.critical(
-                None,
-                'File not found',
-                'Please choose your input file',
-                QMessageBox.Ok)
+            QMessageBox.critical(None, "找不到文件", "请重新选择文件", QMessageBox.Ok)
             return
 
         self.txtLengthResult.setPlainText("")
@@ -151,31 +111,22 @@ class MainDlg(QTabWidget, Ui_mainDlg):
             self.txtLengthResult.setPlainText(result)
         except:
             msg = traceback.format_exc()
-            QMessageBox.critical(
-                None,
-                "Error",
-                msg,
-                QMessageBox.Ok)
+            QMessageBox.critical(None, "错误", msg, QMessageBox.Ok)
         finally:
             QApplication.restoreOverrideCursor()
 
     def areaIntersectionFileChosen(self):
-        fileName = getOpenFileName(self,
-                                   "Please choose the POLYGON file",
-                                   "",
-                                   "Keyhole Markup Language (*.kml *.kmz)")
+        fileName, _ = QFileDialog.getOpenFileName(
+            self, "Please choose the POLYGON file", "", "KML文件 (*.kml *.kmz)",
+        )
 
         if fileName:
             self.txtAreaIntersectionFilePath.setText(fileName)
 
     def doCalculateAreaIntersection(self):
-        areaFileName = unicode(self.txtAreaIntersectionFilePath.text())
+        areaFileName = self.txtAreaIntersectionFilePath.text()
         if not os.path.exists(areaFileName):
-            QMessageBox.critical(
-                None,
-                'File not found',
-                'Please choose your input file',
-                QMessageBox.Ok)
+            QMessageBox.critical(None, "找不到文件", "请重新选择文件", QMessageBox.Ok)
             return
 
         self.txtAreaResult.setPlainText("")
@@ -188,23 +139,17 @@ class MainDlg(QTabWidget, Ui_mainDlg):
             self.txtAreaIntersectionResult.setPlainText(result)
         except:
             msg = traceback.format_exc()
-            QMessageBox.critical(
-                None,
-                "Error",
-                msg,
-                QMessageBox.Ok)
+            QMessageBox.critical(None, "错误", msg, QMessageBox.Ok)
         finally:
             QApplication.restoreOverrideCursor()
 
 
 def main():
-    import sys
-
     app = QApplication(sys.argv)
     dialog = MainDlg()
     dialog.show()
     sys.exit(app.exec_())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
