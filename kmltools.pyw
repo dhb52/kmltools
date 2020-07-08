@@ -45,7 +45,7 @@ class MainDlg(QWidget):
 
         self.setLayout(vbox)
         self.setWindowTitle("KML规划支撑工具")
-        self.setGeometry(300, 300, 800, 600)
+        self.resize(800, 600)
         self.setWindowIcon(QIcon(":/app.ico"))
 
 
