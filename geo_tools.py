@@ -152,13 +152,14 @@ def load_data(points_file, polygons_file):
 
 def points_inside_info(points, polygons):
     result = StringIO()
-    result.write(u"点名称,点所在目录,多边形名称,多边形所在目录\n")
+    result.write("点名称,经度,纬度,点所在目录,多边形名称,多边形所在目录\n")
     for point in points:
         x, y = point.coord.x, point.coord.y
         for poly in polygons:
             if point_in_poly(x, y, poly.coords):
                 result.write(
-                    u"%s,%s,%s,%s\n" % (point.name, point.path, poly.name, poly.path)
+                    "%s,%f,%f,%s,%s,%s\n"
+                    % (point.name, x, y, point.path, poly.name, poly.path)
                 )
     return result.getvalue()
 
@@ -168,23 +169,22 @@ def calc_poly_areas(polygons):
     result.write("名称,所在目录,面积(平方)\n")
     for a in polygons:
         area = _polygon_area(a.coords)
-        result.write(u"%s,%s,%f\n" % (a.name, a.path, area))
+        result.write("%s,%s,%f\n" % (a.name, a.path, area))
     return result.getvalue()
 
 
 def calc_line_length(lines):
     result = StringIO()
-    result.write(u"名称,所在目录,长度(米)\n")
+    result.write("名称,所在目录,长度(米)\n")
     for a in lines:
         length = _line_length(a.coords)
-        result.write(u"%s,%s,%f\n" % (a.name, a.path, length))
+        result.write("%s,%s,%f\n" % (a.name, a.path, length))
     return result.getvalue()
 
 
 def calc_area_intersection_area(polygons):
-
     result = StringIO()
-    result.write(u"多边形1,多边形1所在目录,多边形2,多边形2所在目录,重叠面积(平方)\n")
+    result.write("多边形1,多边形1所在目录,多边形2,多边形2所在目录,重叠面积(平方)\n")
     for i, p1 in enumerate(polygons):
         shapely_p1 = ShapelyPolygon(p1.coords)
         for p2 in polygons[i + 1 :]:
@@ -197,9 +197,19 @@ def calc_area_intersection_area(polygons):
             if isinstance(inter, ShapelyPolygonType):
                 area = _polygon_area(inter.exterior.coords)
                 result.write(
-                    u"%s,%s,%s,%s,%f\n" % (p1.name, p1.path, p2.name, p2.path, -area)
+                    "%s,%s,%s,%s,%f\n" % (p1.name, p1.path, p2.name, p2.path, -area)
                 )
 
+    return result.getvalue()
+
+
+def points_to_csv(points):
+    result = StringIO()
+    result.write("名称,经度,纬度,点所在目录\n")
+    for point in points:
+        result.write(
+            "%s,%f,%f,%s\n" % (point.name, point.coord.x, point.coord.y, point.path)
+        )
     return result.getvalue()
 
 

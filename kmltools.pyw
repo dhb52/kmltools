@@ -20,13 +20,12 @@ class MainDlg(QTabWidget, Ui_MainDlg):
     def __init__(self, parent=None):
         super(MainDlg, self).__init__(parent)
         self.setupUi(self)
-        self.setWindowIcon(QIcon(':/app.ico'))
+        self.setWindowIcon(QIcon(":/app.ico"))
 
     def pointFileChosen(self):
         fileName, _ = QFileDialog.getOpenFileName(
             self, "选择点图层文件", "", "KML文件 (*.kml *.kmz)",
         )
-
         if fileName:
             self.txtPointFilePath.setText(fileName)
 
@@ -34,9 +33,15 @@ class MainDlg(QTabWidget, Ui_MainDlg):
         fileName, _ = QFileDialog.getOpenFileName(
             self, "选择多边形图层文件", "", "KML文件 (*.kml *.kmz)",
         )
-
         if fileName:
             self.txtPolygonFilePath.setText(fileName)
+
+    def pointsOutFileChosen(self):
+        fileName, _ = QFileDialog.getOpenFileName(
+            self, "选择多边形图层文件", "", "KML文件 (*.kml *.kmz)",
+        )
+        if fileName:
+            self.txtPointsOutFilePath.setText(fileName)
 
     def doCalculate(self):
         polygonFileName = self.txtPolygonFilePath.text()
@@ -63,7 +68,6 @@ class MainDlg(QTabWidget, Ui_MainDlg):
         fileName, _ = QFileDialog.getOpenFileName(
             self, "选择多边形图层文件", "", "KML文件 (*.kml *.kmz)",
         )
-
         if fileName:
             self.txtAreaFilePath.setText(fileName)
 
@@ -91,7 +95,6 @@ class MainDlg(QTabWidget, Ui_MainDlg):
         fileName, _ = QFileDialog.getOpenFileName(
             self, "选择连线的图层文件", "", "KML文件 (*.kml *.kmz)",
         )
-
         if fileName:
             self.txtLineFilePath.setText(fileName)
 
@@ -117,9 +120,8 @@ class MainDlg(QTabWidget, Ui_MainDlg):
 
     def areaIntersectionFileChosen(self):
         fileName, _ = QFileDialog.getOpenFileName(
-            self, "Please choose the POLYGON file", "", "KML文件 (*.kml *.kmz)",
+            self, "选择多边形图层文件", "", "KML文件 (*.kml *.kmz)",
         )
-
         if fileName:
             self.txtAreaIntersectionFilePath.setText(fileName)
 
@@ -137,6 +139,24 @@ class MainDlg(QTabWidget, Ui_MainDlg):
             polygons = geo_tools.load_polygons(areaFileName)
             result = geo_tools.calc_area_intersection_area(polygons)
             self.txtAreaIntersectionResult.setPlainText(result)
+        except:
+            msg = traceback.format_exc()
+            QMessageBox.critical(None, "错误", msg, QMessageBox.Ok)
+        finally:
+            QApplication.restoreOverrideCursor()
+
+    def doOutputPoints(self):
+        pointsFileName = self.txtPointsOutFilePath.text()
+        if not os.path.exists(pointsFileName):
+            QMessageBox.critical(None, "找不到文件", "请重新选择文件", QMessageBox.Ok)
+            return
+
+        self.txPointOutResult.setPlainText("")
+        try:
+            QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
+            points = geo_tools.load_points(pointsFileName)
+            result = geo_tools.points_to_csv(points)
+            self.txPointOutResult.setPlainText(result)
         except:
             msg = traceback.format_exc()
             QMessageBox.critical(None, "错误", msg, QMessageBox.Ok)
