@@ -20,22 +20,22 @@ import geo_tools
 
 
 class Tab(QWidget):
-    name = "长度计算"
+    name = "面积计算"
 
     def __init__(self, parent=None):
         super(Tab, self).__init__(parent)
         self.setupUi()
 
     def setupUi(self):
-        label1 = QLabel("线图层文件")
-        editLinesPath = QLineEdit(self)
-        editLinesPath.setDisabled(True)
-        label1.setBuddy(editLinesPath)
-        btnChooseLines = QPushButton("选择线图层文件")
+        label1 = QLabel("面图层文件")
+        editPolygonsPath = QLineEdit(self)
+        editPolygonsPath.setDisabled(True)
+        label1.setBuddy(editPolygonsPath)
+        btnChoosePolygons = QPushButton("选择")
         hbox1 = QHBoxLayout()
         hbox1.addWidget(label1)
-        hbox1.addWidget(editLinesPath)
-        hbox1.addWidget(btnChooseLines)
+        hbox1.addWidget(editPolygonsPath)
+        hbox1.addWidget(btnChoosePolygons)
 
         btnCalculate = QPushButton("计算")
         hbox2 = QHBoxLayout()
@@ -52,24 +52,23 @@ class Tab(QWidget):
         self.setLayout(vbox)
 
         btnCalculate.clicked.connect(self.calculate)
-        btnChooseLines.clicked.connect(self.chooseLinesFile)
+        btnChoosePolygons.clicked.connect(self.choosePolygonsFile)
 
-        self.editLinesPath = editLinesPath
+        self.editPolygonsPath = editPolygonsPath
         self.txtResult = txtResult
 
     def calculate(self):
-        lineFileName = self.editLinesPath.text()
-        if not os.path.exists(lineFileName):
+        polygonFileName = self.editPolygonsPath.text()
+        if not os.path.exists(polygonFileName):
             QMessageBox.critical(None, "找不到文件", "请重新选择文件", QMessageBox.Ok)
             return
 
         self.txtResult.setPlainText("")
         QApplication.processEvents()
-
         try:
             QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
-            lines = geo_tools.load_lines(lineFileName)
-            result = geo_tools.calc_line_length(lines)
+            polygons = geo_tools.load_polygons(polygonFileName)
+            result = geo_tools.calc_poly_areas(polygons)
             self.txtResult.setPlainText(result)
         except:
             msg = traceback.format_exc()
@@ -77,10 +76,10 @@ class Tab(QWidget):
         finally:
             QApplication.restoreOverrideCursor()
 
-    def chooseLinesFile(self):
+    def choosePolygonsFile(self):
         fileName, _ = QFileDialog.getOpenFileName(
-            self, "选择线图层文件", "", "KML文件 (*.kml *.kmz)",
+            self, "选择多边形图层文件", "", "KML文件 (*.kml *.kmz)",
         )
         if fileName:
-            self.editLinesPath.setText(fileName)
+            self.editPolygonsPath.setText(fileName)
 

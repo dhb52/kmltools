@@ -31,7 +31,7 @@ class Tab(QWidget):
         editPolygonsPath = QLineEdit(self)
         editPolygonsPath.setDisabled(True)
         label1.setBuddy(editPolygonsPath)
-        btnChoosePolygons = QPushButton("选择面图层文件")
+        btnChoosePolygons = QPushButton("选择")
         hbox1 = QHBoxLayout()
         hbox1.addWidget(label1)
         hbox1.addWidget(editPolygonsPath)

@@ -11,7 +11,8 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-import tab1, tab2, tab3, tab4, tab5
+import rc_resource
+from tabs import tab1, tab2, tab3, tab4, tab5
 
 
 class MyTabWidget(QTabWidget):
