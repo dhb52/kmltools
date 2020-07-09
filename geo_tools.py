@@ -18,6 +18,8 @@ __all__ = [
     "points_inside_info",
     "calc_poly_areas",
     "calc_line_length",
+    "calc_polygon_intersection_area",
+    "points_to_csv",
 ]
 
 
@@ -94,7 +96,7 @@ def _polygon_area(coordinates):
     for lon, lat in coordinates:
         p.AddPoint(lat, lon)
     _, _, area = p.Compute()
-    return area
+    return abs(area)
 
 
 def _read_kml_from_file(file_path):
@@ -182,7 +184,7 @@ def calc_line_length(lines):
     return result.getvalue()
 
 
-def calc_area_intersection_area(polygons):
+def calc_polygon_intersection_area(polygons):
     result = StringIO()
     result.write("多边形1,多边形1所在目录,多边形2,多边形2所在目录,重叠面积(平方)\n")
     for i, p1 in enumerate(polygons):
@@ -196,9 +198,10 @@ def calc_area_intersection_area(polygons):
                 pass
             if isinstance(inter, ShapelyPolygonType):
                 area = _polygon_area(inter.exterior.coords)
-                result.write(
-                    "%s,%s,%s,%s,%f\n" % (p1.name, p1.path, p2.name, p2.path, -area)
-                )
+                if area > 0:
+                    result.write(
+                        "%s,%s,%s,%s,%f\n" % (p1.name, p1.path, p2.name, p2.path, area)
+                    )
 
     return result.getvalue()
 

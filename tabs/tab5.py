@@ -68,7 +68,7 @@ class Tab(QWidget):
         try:
             QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
             polygons = geo_tools.load_polygons(areaFileName)
-            result = geo_tools.calc_area_intersection_area(polygons)
+            result = geo_tools.calc_polygon_intersection_area(polygons)
             self.txtResult.setPlainText(result)
         except:
             msg = traceback.format_exc()
