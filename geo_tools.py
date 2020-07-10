@@ -2,25 +2,15 @@
 # coding: utf-8
 
 
-from io import StringIO
 import zipfile
-from fastkml import kml
-from fastkml import geometry
+from io import StringIO
+
+import openpyxl
+from fastkml import geometry, kml, styles
 from geographiclib.geodesic import Geodesic
+from shapely.geometry import LineString as ShapelyLineString
 from shapely.geometry import Polygon as ShapelyPolygon
 from shapely.geometry.polygon import Polygon as ShapelyPolygonType
-
-
-__all__ = [
-    "load_points",
-    "load_polygons",
-    "load_lines",
-    "points_inside_info",
-    "calc_poly_areas",
-    "calc_line_length",
-    "calc_polygon_intersection_area",
-    "points_to_csv",
-]
 
 
 class GeoPolygon:
@@ -216,7 +206,55 @@ def points_to_csv(points):
     return result.getvalue()
 
 
+def link_points_kml(excel_path, kml_path):
+    wb = openpyxl.load_workbook(excel_path)
+    ws = wb.active
+    kml_obj = kml.KML()
+    lstyle = styles.LineStyle(color="ff00c500", width=2.0)
+    style = styles.Style(styles=[lstyle])
+    folder = kml.Folder(name="批量连线", styles=[style])
+
+    kml_obj.append(folder)
+    for row in ws.iter_rows(min_row=2, max_col=6, values_only=True):
+        p1_name, p1_lon, p1_lat, p2_name, p2_lon, p2_lat = row
+        p1_lon, p1_lat, p2_lon, p2_lat = (
+            float(p1_lon),
+            float(p1_lat),
+            float(p2_lon),
+            float(p2_lat),
+        )
+        if p1_lon != p2_lon and p1_lat != p2_lat:
+            line = ShapelyLineString([(p1_lon, p1_lat, 0), (p2_lon, p2_lat, 0)])
+            p = kml.Placemark(name=f"{p1_name}<->{p2_name}", styles=[style])
+            p.geometry = line
+            folder.append(p)
+    kmlstr = kml_obj.to_string(prettyprint=True)
+    with open(kml_path, "w") as out:
+        out.write(kmlstr)
+    wb.close()
+
+
+def save_excel_template(excel_path):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    rows = (
+        ("点1名称", "经度", "纬度", "点2名称", "经度", "纬度"),
+        ("潮州市", 116.622604, 23.65695, "枫溪镇", 116.606779, 23.64921),
+        ("潮州市", 116.622604, 23.65695, "湘桥区", 116.628632, 23.674536),
+        ("潮州市", 116.622604, 23.65695, "古巷镇", 116.574761, 23.661714),
+        ("潮州市", 116.622604, 23.65695, "东丽湖新村", 116.665511, 23.662787),
+        ("潮州市", 116.622604, 23.65695, "下水头村", 116.630906, 23.623607),
+        ("潮州市", 116.622604, 23.65695, "潮州市", 116.622604, 23.65695),
+    )
+    for row in rows:
+        ws.append(row)
+    wb.save(excel_path)
+    wb.close()
+
+
 if __name__ == "__main__":
-    points, polygons = load_data("points.kml", "areas.kml")
-    print(points_inside_info(points, polygons))
-    print(calc_poly_areas(polygons))
+    # points, polygons = load_data("points.kml", "areas.kml")
+    # print(points_inside_info(points, polygons))
+    # print(calc_poly_areas(polygons))
+    save_excel_template("/Users/barry/Desktop/book.xlsx")
+    link_points_kml("/Users/barry/Desktop/book.xlsx", "/Users/barry/Desktop/out.kml")
