@@ -24,27 +24,10 @@ KML 传输规划支撑工具在传输规划方面，目前大部分规划人员�
 应用场景：验证网格区域是否存在重叠问题
 
 # 二次开发
-## step 1
-create a virtual environment
 ```
 python -m venv .venv
 .\venv\Scripts\activate.bat
-```
-
-## step 2
-install the requiements 
-```
 pip install -r requirements.txt
-```
-
-## step 3
-generate the resource file
-```
 pyrcc5 resource.qrc -o rc_resource.py
-```
-
-## step 4
-Bundle the app
-```
-pyinstaller -i app.ico -w kmltools.pyw
+pyinstaller -i app.ico -w -F kmltools.pyw
 ```
