@@ -16,7 +16,7 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-import geo_tools
+from helpers import loader, service
 
 
 class Tab(QWidget):
@@ -67,8 +67,8 @@ class Tab(QWidget):
         QApplication.processEvents()
         try:
             QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
-            polygons = geo_tools.load_polygons(polygonFileName)
-            result = geo_tools.calc_poly_areas(polygons)
+            polygons = loader.load_polygons(polygonFileName)
+            result = service.calc_poly_areas(polygons)
             self.txtResult.setPlainText(result)
         except:
             msg = traceback.format_exc()
@@ -82,4 +82,3 @@ class Tab(QWidget):
         )
         if fileName:
             self.editPolygonsPath.setText(fileName)
-

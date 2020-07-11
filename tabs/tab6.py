@@ -16,7 +16,7 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-import geo_tools
+from helpers import loader, service
 
 
 class Tab(QWidget):
@@ -73,7 +73,7 @@ class Tab(QWidget):
         QApplication.processEvents()
         try:
             QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
-            geo_tools.link_points_kml(excelPath, kmlPath)
+            service.link_points_kml(excelPath, kmlPath)
             self.txtResult.setPlainText("成功生成KML文件")
         except:
             msg = traceback.format_exc()
@@ -93,4 +93,4 @@ class Tab(QWidget):
             self, "选择Excel文件", "模版", "Microsoft Excel File (*.xlsx)",
         )
         if fileName:
-            geo_tools.save_excel_template(fileName)
+            service.save_excel_template(fileName)

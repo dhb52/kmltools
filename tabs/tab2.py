@@ -16,7 +16,7 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-import geo_tools
+from helpers import loader, service
 
 
 class Tab(QWidget):
@@ -66,8 +66,8 @@ class Tab(QWidget):
         self.txtResult.setPlainText("")
         try:
             QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
-            points = geo_tools.load_points(pointFileName)
-            result = geo_tools.points_to_csv(points)
+            points = loader.load_points(pointFileName)
+            result = service.points_to_csv(points)
             self.txtResult.setPlainText(result)
         except:
             msg = traceback.format_exc()

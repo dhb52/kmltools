@@ -16,7 +16,7 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-import geo_tools
+from helpers import loader, service
 
 
 class Tab(QWidget):
@@ -68,8 +68,8 @@ class Tab(QWidget):
 
         try:
             QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
-            lines = geo_tools.load_lines(lineFileName)
-            result = geo_tools.calc_line_length(lines)
+            lines = loader.load_lines(lineFileName)
+            result = service.calc_line_length(lines)
             self.txtResult.setPlainText(result)
         except:
             msg = traceback.format_exc()
@@ -83,4 +83,3 @@ class Tab(QWidget):
         )
         if fileName:
             self.editLinesPath.setText(fileName)
-
