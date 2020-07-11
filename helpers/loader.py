@@ -47,23 +47,20 @@ def _find_features(result, element, feature_type, path=""):
             if not feature.name:
                 feature.name = ""
             new_path = "/".join((path, feature.name))
-        elif isinstance(feature, kml.Placemark):
-            if feature_type == geometry.Polygon and isinstance(
-                feature.geometry, feature_type
-            ):
+        elif isinstance(feature, kml.Placemark) and isinstance(
+            feature.geometry, feature_type
+        ):
+            if feature_type == geometry.Polygon:
                 coords = [(p[0], p[1]) for p in feature.geometry.exterior.coords]
                 poly = _GeoPolygon(feature.name, path, coords)
                 result.append(poly)
-            elif feature_type == geometry.Point and isinstance(
-                feature.geometry, feature_type
-            ):
+            elif feature_type == geometry.Point:
                 point = _GeoPoint(feature.name, path, feature.geometry)
                 result.append(point)
-            elif feature_type == geometry.LineString and isinstance(
-                feature.geometry, feature_type
-            ):
+            elif feature_type == geometry.LineString:
                 line = _GeoLine(feature.name, path, feature.geometry.coords)
                 result.append(line)
+
         _find_features(result, feature, feature_type, new_path)
 
 
