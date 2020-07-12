@@ -1,26 +1,36 @@
 import zipfile
 
 from fastkml import geometry, kml
+from shapely.geometry import Point
+from shapely.geometry.polygon import Polygon
 
 
-class _GeoPolygon:
-    def __init__(self, name, path, coords):
+class _GeoBase:
+    def __init__(self, name, path) -> None:
         self.name = name
         self.path = path
+
+
+class _GeoPolygon(_GeoBase):
+    def __init__(self, name, path, coords) -> None:
+        super(_GeoPolygon, self).__init__(name, path)
         self.coords = coords
 
+    def contains(self, x, y) -> bool:
+        points = [Point(p) for p in self.coords]
+        poly = Polygon(points)
+        return poly.contains(Point(x, y))
 
-class _GeoPoint:
-    def __init__(self, name, path, coord):
-        self.name = name
-        self.path = path
+
+class _GeoPoint(_GeoBase):
+    def __init__(self, name, path, coord) -> None:
+        super(_GeoPoint, self).__init__(name, path)
         self.coord = coord
 
 
-class _GeoLine:
-    def __init__(self, name, path, coords):
-        self.name = name
-        self.path = path
+class _GeoLine(_GeoBase):
+    def __init__(self, name, path, coords) -> None:
+        super(_GeoPoint, self).__init__(name, path)
         self.coords = coords
 
 
@@ -39,6 +49,9 @@ def _load_kml(path) -> kml.KML:
 
 
 def _find_features(result, element, feature_type, path=""):
+    """Recursively find feature by [feature_type]
+    and add current path info to the current feature
+    """
     new_path = path
     if not getattr(element, "features", None):
         return

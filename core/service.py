@@ -24,7 +24,8 @@ def points_inside_info(points, polygons) -> str:
     for point in points:
         x, y = point.coord.x, point.coord.y
         for poly in polygons:
-            if calculator.point_in_poly(x, y, poly.coords):
+            # if calculator.point_in_poly(x, y, poly.coords):
+            if poly.contains(x, y):
                 result.write(
                     "%s,%f,%f,%s,%s,%s\n"
                     % (point.name, x, y, point.path, poly.name, poly.path)
@@ -92,15 +93,15 @@ def link_points_kml(excel_path, kml_path) -> None:
 
     kml_obj.append(folder)
     for row in ws.iter_rows(min_row=2, max_col=6, values_only=True):
-        p1_name, p1_lon, p1_lat, p2_name, p2_lon, p2_lat = row
-        p1_lon, p1_lat, p2_lon, p2_lat = (
-            float(p1_lon),
-            float(p1_lat),
-            float(p2_lon),
-            float(p2_lat),
+        p1_name, p1_x, p1_y, p2_name, p2_x, p2_y = row
+        p1_x, p1_y, p2_x, p2_y = (
+            float(p1_x),
+            float(p1_y),
+            float(p2_x),
+            float(p2_y),
         )
-        if p1_lon != p2_lon and p1_lat != p2_lat:
-            line = ShapelyLineString([(p1_lon, p1_lat, 0), (p2_lon, p2_lat, 0)])
+        if p1_x != p2_x and p1_y != p2_y:
+            line = ShapelyLineString([(p1_x, p1_y, 0), (p2_x, p2_y, 0)])
             p = kml.Placemark(name=f"{p1_name}<->{p2_name}", styles=[style])
             p.geometry = line
             folder.append(p)
