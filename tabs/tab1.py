@@ -16,7 +16,7 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-from helpers import loader, service
+from core import loader, service
 
 
 class Tab(QWidget):
