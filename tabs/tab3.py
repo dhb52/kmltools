@@ -68,7 +68,7 @@ class Tab(QWidget):
         try:
             QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
             polygons = loader.load_polygons(polygonFileName)
-            result = service.calc_poly_areas(polygons)
+            result = service.calc_polygons_area(polygons)
             self.txtResult.setPlainText(result)
         except:
             msg = traceback.format_exc()

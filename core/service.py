@@ -1,75 +1,59 @@
 from io import StringIO
 
 import openpyxl
-from fastkml import geometry, kml, styles
+from fastkml import kml, styles
 from shapely.geometry import LineString as ShapelyLineString
 from shapely.geometry import Polygon as ShapelyPolygon
-from shapely.geometry.polygon import Polygon as ShapelyPolygonType
 
 from . import _calculator as calculator
 
 
-def calc_poly_areas(polygons):
-    result = StringIO()
-    result.write("名称,所在目录,面积(平方)\n")
-    for a in polygons:
-        area = calculator.polygon_area(a.coords)
-        result.write("%s,%s,%f\n" % (a.name, a.path, area))
-    return result.getvalue()
-
-
-def points_inside_info(points, polygons) -> str:
+def calc_points_inside_polygons(points, polygons) -> str:
     result = StringIO()
     result.write("点名称,经度,纬度,点所在目录,多边形名称,多边形所在目录\n")
     for point in points:
-        x, y = point.coord.x, point.coord.y
         for poly in polygons:
-            if calculator.point_in_poly(x, y, poly.coords):
-            # if poly.contains(x, y):
+            if calculator.is_point_in_polygon(point.x, point.y, poly.coords):
                 result.write(
-                    "%s,%f,%f,%s,%s,%s\n"
-                    % (point.name, x, y, point.path, poly.name, poly.path)
+                    f"{point.name},{point.x},{point.y},{point.path},{poly.name},{poly.path}\n"
                 )
     return result.getvalue()
 
 
-def calc_poly_areas(polygons) -> str:
+def calc_polygons_area(polygons) -> str:
     result = StringIO()
     result.write("名称,所在目录,面积(平方)\n")
     for a in polygons:
         area = calculator.polygon_area(a.coords)
-        result.write("%s,%s,%f\n" % (a.name, a.path, area))
+        result.write(f"{a.name},{a.path},{area}\n")
     return result.getvalue()
 
 
-def calc_line_length(lines) -> str:
+def calc_lines_length(lines) -> str:
     result = StringIO()
     result.write("名称,所在目录,长度(米)\n")
     for a in lines:
         length = calculator.line_length(a.coords)
-        result.write("%s,%s,%f\n" % (a.name, a.path, length))
+        result.write(f"{a.name},{a.path},{length}\n")
     return result.getvalue()
 
 
-def calc_polygon_intersection_area(polygons) -> str:
+def calc_polygons_intersection_area(polygons) -> str:
     result = StringIO()
     result.write("多边形1,多边形1所在目录,多边形2,多边形2所在目录,重叠面积(平方)\n")
     for i, p1 in enumerate(polygons):
         shapely_p1 = ShapelyPolygon(p1.coords)
-        for p2 in polygons[i+1:]:
+        for p2 in polygons[i + 1 :]:
             shapely_p2 = ShapelyPolygon(p2.coords)
             inter = None
             try:
                 inter = shapely_p1.intersection(shapely_p2)
             except:
                 pass
-            if isinstance(inter, ShapelyPolygonType):
+            if isinstance(inter, ShapelyPolygon):
                 area = calculator.polygon_area(inter.exterior.coords)
                 if area > 0:
-                    result.write(
-                        "%s,%s,%s,%s,%f\n"
-                        % (p1.name, p1.path, p2.name, p2.path, area)
-                    )
+                    result.write(f"{p1.name},{p1.path},{p2.name},{p2.path},{area}\n")
 
     return result.getvalue()
 
@@ -78,10 +62,9 @@ def points_to_csv(points) -> str:
     result = StringIO()
     result.write("名称,经度,纬度,点所在目录\n")
     for point in points:
-        result.write(
-            "%s,%f,%f,%s\n" % (point.name, point.coord.x, point.coord.y, point.path)
-        )
+        result.write(f"{point.name},{point.x},{point.y},{point.path}\n")
     return result.getvalue()
+
 
 def link_points_kml(excel_path, kml_path) -> None:
     wb = openpyxl.load_workbook(excel_path)

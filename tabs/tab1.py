@@ -83,7 +83,7 @@ class Tab(QWidget):
             QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
             points = loader.load_points(pointFileName)
             polygons = loader.load_polygons(polygonFileName)
-            result = service.points_inside_info(points, polygons)
+            result = service.calc_points_inside_polygons(points, polygons)
             self.txtResult.setPlainText(result)
         except:
             msg = traceback.format_exc()

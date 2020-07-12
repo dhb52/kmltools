@@ -69,7 +69,7 @@ class Tab(QWidget):
         try:
             QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
             lines = loader.load_lines(lineFileName)
-            result = service.calc_line_length(lines)
+            result = service.calc_lines_length(lines)
             self.txtResult.setPlainText(result)
         except:
             msg = traceback.format_exc()

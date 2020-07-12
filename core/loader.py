@@ -1,37 +1,20 @@
 import zipfile
 
 from fastkml import geometry, kml
-from shapely.geometry import Point
-from shapely.geometry.polygon import Polygon
 
 
-class _GeoBase:
-    def __init__(self, name, path) -> None:
+class PlacemarkWithPath:
+    def __init__(self, name, path, geom) -> None:
         self.name = name
         self.path = path
-
-
-class _GeoPolygon(_GeoBase):
-    def __init__(self, name, path, coords) -> None:
-        super(_GeoPolygon, self).__init__(name, path)
-        self.coords = coords
-
-    def contains(self, x, y) -> bool:
-        points = [Point(p) for p in self.coords]
-        poly = Polygon(points)
-        return poly.contains(Point(x, y))
-
-
-class _GeoPoint(_GeoBase):
-    def __init__(self, name, path, coord) -> None:
-        super(_GeoPoint, self).__init__(name, path)
-        self.coord = coord
-
-
-class _GeoLine(_GeoBase):
-    def __init__(self, name, path, coords) -> None:
-        super(_GeoPoint, self).__init__(name, path)
-        self.coords = coords
+        if isinstance(geom, geometry.Point):
+            self.x, self.y = geom.coords[0][:2]
+        elif isinstance(geom, geometry.LineString):
+            self.coords = [(p[0], p[1]) for p in geom.coords]
+        elif isinstance(geom, geometry.Polygon):
+            self.coords = [(p[0], p[1]) for p in geom.exterior.coords]
+        else:
+            raise TypeError("Not a LineSting nor Polygon")
 
 
 def _load_kml(path) -> kml.KML:
@@ -63,16 +46,8 @@ def _find_features(result, element, feature_type, path=""):
         elif isinstance(feature, kml.Placemark) and isinstance(
             feature.geometry, feature_type
         ):
-            if feature_type == geometry.Polygon:
-                coords = [(p[0], p[1]) for p in feature.geometry.exterior.coords]
-                poly = _GeoPolygon(feature.name, path, coords)
-                result.append(poly)
-            elif feature_type == geometry.Point:
-                point = _GeoPoint(feature.name, path, feature.geometry)
-                result.append(point)
-            elif feature_type == geometry.LineString:
-                line = _GeoLine(feature.name, path, feature.geometry.coords)
-                result.append(line)
+            placemark = PlacemarkWithPath(feature.name, path, feature.geometry)
+            result.append(placemark)
 
         _find_features(result, feature, feature_type, new_path)
 
