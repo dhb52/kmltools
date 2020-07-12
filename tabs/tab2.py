@@ -37,10 +37,10 @@ class Tab(QWidget):
         hbox1.addWidget(editPointsPath)
         hbox1.addWidget(btnChoosePoints)
 
-        btnCalculate = QPushButton("提取")
+        btnExtract = QPushButton("提取")
         hbox2 = QHBoxLayout()
         hbox2.addStretch(1)
-        hbox2.addWidget(btnCalculate)
+        hbox2.addWidget(btnExtract)
 
         txtResult = QPlainTextEdit(self)
         txtResult.setReadOnly(True)
@@ -51,7 +51,7 @@ class Tab(QWidget):
         vbox.addWidget(txtResult)
         self.setLayout(vbox)
 
-        btnCalculate.clicked.connect(self.extract)
+        btnExtract.clicked.connect(self.extract)
         btnChoosePoints.clicked.connect(self.choosePointsFile)
 
         self.editPointsPath = editPointsPath
