@@ -24,8 +24,8 @@ def points_inside_info(points, polygons) -> str:
     for point in points:
         x, y = point.coord.x, point.coord.y
         for poly in polygons:
-            # if calculator.point_in_poly(x, y, poly.coords):
-            if poly.contains(x, y):
+            if calculator.point_in_poly(x, y, poly.coords):
+            # if poly.contains(x, y):
                 result.write(
                     "%s,%f,%f,%s,%s,%s\n"
                     % (point.name, x, y, point.path, poly.name, poly.path)
