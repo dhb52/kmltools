@@ -5,7 +5,7 @@ def polygon_area(coords) -> float:
     geod = Geodesic.WGS84
     p = geod.Polygon()
     for coord in coords:
-        x, y = coord[:2]
+        x, y = coord
         p.AddPoint(y, x)
     _, _, area = p.Compute()
     return abs(area)
@@ -16,8 +16,8 @@ def line_length(coords) -> float:
     cnt = len(coords)
     length = 0.0
     for i in range(cnt - 1):
-        p1_x, p1_y = coords[i][:2]
-        p2_x, p2_y = coords[i + 1][:2]
+        p1_x, p1_y = coords[i]
+        p2_x, p2_y = coords[i + 1]
         line = geod.Inverse(p1_y, p1_x, p2_y, p2_x)
         length += line["s12"]
     return length

@@ -2,19 +2,7 @@ import zipfile
 
 from fastkml import geometry, kml
 
-
-class PlacemarkWithPath:
-    def __init__(self, name, path, geom) -> None:
-        self.name = name
-        self.path = path
-        if isinstance(geom, geometry.Point):
-            self.x, self.y = geom.coords[0][:2]
-        elif isinstance(geom, geometry.LineString):
-            self.coords = [(p[0], p[1]) for p in geom.coords]
-        elif isinstance(geom, geometry.Polygon):
-            self.coords = [(p[0], p[1]) for p in geom.exterior.coords]
-        else:
-            raise TypeError("Not a LineSting nor Polygon")
+from ._placemark import placemark
 
 
 def _load_kml(path) -> kml.KML:
@@ -46,8 +34,8 @@ def _find_features(result, element, feature_type, path=""):
         elif isinstance(feature, kml.Placemark) and isinstance(
             feature.geometry, feature_type
         ):
-            placemark = PlacemarkWithPath(feature.name, path, feature.geometry)
-            result.append(placemark)
+            pm = placemark(feature.name, path, feature.geometry)
+            result.append(pm)
 
         _find_features(result, feature, feature_type, new_path)
 
