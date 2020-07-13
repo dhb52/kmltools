@@ -3,9 +3,6 @@ from io import StringIO
 import openpyxl
 from fastkml import kml, styles
 from shapely.geometry import LineString as ShapelyLineString
-from shapely.geometry import Polygon as ShapelyPolygon
-
-from . import _calculator as calculator
 
 
 def calc_points_inside_polygons(points, polygons) -> str:
@@ -13,7 +10,7 @@ def calc_points_inside_polygons(points, polygons) -> str:
     result.write("点名称,经度,纬度,点所在目录,多边形名称,多边形所在目录\n")
     for point in points:
         for poly in polygons:
-            if calculator.is_point_in_polygon(point.x, point.y, poly.coords):
+            if poly.contains(point):
                 result.write(
                     f"{point.name},{point.x},{point.y},{point.path},{poly.name},{poly.path}\n"
                 )
@@ -23,18 +20,16 @@ def calc_points_inside_polygons(points, polygons) -> str:
 def calc_polygons_area(polygons) -> str:
     result = StringIO()
     result.write("名称,所在目录,面积(平方)\n")
-    for a in polygons:
-        area = calculator.polygon_area(a.coords)
-        result.write(f"{a.name},{a.path},{area}\n")
+    for p in polygons:
+        result.write(f"{p.name},{p.path},{p.area}\n")
     return result.getvalue()
 
 
 def calc_lines_length(lines) -> str:
     result = StringIO()
     result.write("名称,所在目录,长度(米)\n")
-    for a in lines:
-        length = calculator.line_length(a.coords)
-        result.write(f"{a.name},{a.path},{length}\n")
+    for line in lines:
+        result.write(f"{line.name},{line.path},{line.length}\n")
     return result.getvalue()
 
 
@@ -42,18 +37,10 @@ def calc_polygons_intersection_area(polygons) -> str:
     result = StringIO()
     result.write("多边形1,多边形1所在目录,多边形2,多边形2所在目录,重叠面积(平方)\n")
     for i, p1 in enumerate(polygons):
-        shapely_p1 = ShapelyPolygon(p1.coords)
         for p2 in polygons[i + 1 :]:
-            shapely_p2 = ShapelyPolygon(p2.coords)
-            inter = None
-            try:
-                inter = shapely_p1.intersection(shapely_p2)
-            except:
-                pass
-            if isinstance(inter, ShapelyPolygon):
-                area = calculator.polygon_area(inter.exterior.coords)
-                if area > 0:
-                    result.write(f"{p1.name},{p1.path},{p2.name},{p2.path},{area}\n")
+            area = p1.intersection_area(p2)
+            if area > 0:
+                result.write(f"{p1.name},{p1.path},{p2.name},{p2.path},{area}\n")
 
     return result.getvalue()
 

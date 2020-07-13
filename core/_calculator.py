@@ -1,4 +1,5 @@
 from geographiclib.geodesic import Geodesic
+from shapely.geometry import Polygon as ShapelyPolygon
 
 
 def polygon_area(coords) -> float:
@@ -23,14 +24,14 @@ def line_length(coords) -> float:
     return length
 
 
-def is_point_in_polygon(x, y, poly) -> bool:
+def is_point_in_polygon(x, y, polygon_coords) -> bool:
     """url: https://stackoverflow.com/questions/36399381/whats-the-fastest-way-of-checking-if-a-point-is-inside-a-polygon-in-python
     """
-    n = len(poly)
+    n = len(polygon_coords)
     inside = False
-    p1x, p1y = poly[0]
+    p1x, p1y = polygon_coords[0]
     for i in range(n + 1):
-        p2x, p2y = poly[i % n]
+        p2x, p2y = polygon_coords[i % n]
         if y > min(p1y, p2y):
             if y <= max(p1y, p2y):
                 if x <= max(p1x, p2x):
@@ -41,3 +42,17 @@ def is_point_in_polygon(x, y, poly) -> bool:
                         inside = not inside
         p1x, p1y = p2x, p2y
     return inside
+
+
+def polygon_intersect(polygon1_coords, polygon2_coords):
+    shapely_p1 = ShapelyPolygon(polygon1_coords)
+    shapely_p2 = ShapelyPolygon(polygon2_coords)
+    inter = None
+    try:
+        inter = shapely_p1.intersection(shapely_p2)
+    except:
+        pass
+    if isinstance(inter, ShapelyPolygon):
+        return inter.exterior.coords
+    else:
+        return None

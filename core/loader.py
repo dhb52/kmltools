@@ -40,20 +40,20 @@ def _find_features(result, element, feature_type, path=""):
         _find_features(result, feature, feature_type, new_path)
 
 
-def _load_feature_from_file(kml_file, featur_type):
+def _load_feature_from_file(kml_file, featur_type) -> list:
     features = []
     k = _load_kml(kml_file)
     _find_features(features, k, featur_type)
     return features
 
 
-def load_points(kml_file):
+def load_points(kml_file) -> list:
     return _load_feature_from_file(kml_file, geometry.Point)
 
 
-def load_polygons(kml_file):
+def load_polygons(kml_file) -> list:
     return _load_feature_from_file(kml_file, geometry.Polygon)
 
 
-def load_lines(kml_file):
+def load_lines(kml_file) -> list:
     return _load_feature_from_file(kml_file, geometry.LineString)

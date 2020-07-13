@@ -1,5 +1,7 @@
 from fastkml import geometry
 
+from . import _calculator
+
 
 class PlacemarkWithPath:
     def __init__(self, name, path) -> None:
@@ -18,11 +20,32 @@ class LineString(PlacemarkWithPath):
         super(LineString, self).__init__(name, path)
         self.coords = [(p[0], p[1]) for p in geom.coords]
 
+    @property
+    def length(self) -> float:
+        return _calculator.line_length(self.coords)
+
 
 class Polygon(PlacemarkWithPath):
     def __init__(self, name, path, geom) -> None:
         super(Polygon, self).__init__(name, path)
         self.coords = [(p[0], p[1]) for p in geom.exterior.coords]
+
+    @property
+    def area(self) -> float:
+        return _calculator.polygon_area(self.coords)
+
+    def contains(self, point) -> bool:
+        return _calculator.is_point_in_polygon(point.x, point.y, self.coords)
+
+    def intersection_area(self, other) -> float:
+        shapely_intersection_coords = _calculator.polygon_intersect(
+            self.coords, other.coords
+        )
+        if shapely_intersection_coords is not None:
+            area = _calculator.polygon_area(shapely_intersection_coords)
+            return area
+        else:
+            return 0
 
 
 def placemark(name, path, geom) -> PlacemarkWithPath:
