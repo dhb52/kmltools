@@ -97,3 +97,47 @@ def save_excel_template(excel_path) -> None:
         ws.append(row)
     wb.save(excel_path)
     wb.close()
+
+
+def link_radio_cran(radio_points, cran_points, grids, out_kml) -> str:
+    grid_links = []
+    for grid in grids:
+        grid_cran = []
+        grid_radio = []
+        for c in cran_points:
+            if grid.contains(c):
+                grid_cran.append(c)
+        for r in radio_points:
+            if grid.contains(r):
+                grid_radio.append(r)
+        grid_links.append((grid, grid_cran, grid_radio))
+
+    kml_obj = kml.KML()
+    lstyle = styles.LineStyle(color="ff00c500", width=2.0)
+    style = styles.Style(styles=[lstyle])
+    root_folder = kml.Folder(name="CRAN连线", styles=[style])
+
+    kml_obj.append(root_folder)
+    result = StringIO()
+    for link in grid_links:
+        grids, grid_cran, grid_radio = link
+        if len(grid_cran) != 1:
+            result.write(f"{grids.name}:网格机房个数为{len(grid_cran)}\n")
+            continue
+
+        grid_folder = kml.Folder(name=grids.name)
+        root_folder.append(grid_folder)
+        for p1 in grid_cran:
+            for p2 in grid_radio:
+                if p1.x != p2.x and p1.y != p2.y:
+                    line = ShapelyLineString([(p1.x, p1.y, 0), (p2.x, p2.y, 0)])
+                    p = kml.Placemark(name=f"{p1.name}<->{p2.name}", styles=[style])
+                    p.geometry = line
+                    grid_folder.append(p)
+
+    kmlstr = kml_obj.to_string(prettyprint=True)
+    with open(out_kml, "w") as out:
+        out.write(kmlstr)
+
+    result.write("连线完成\n")
+    return result.getvalue()

@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import (
 )
 
 import rc_resource
-from tabs import tab1, tab2, tab3, tab4, tab5, tab6
+from tabs import tab1, tab2, tab3, tab4, tab5, tab6, tab7
 
 
 class MyTabWidget(QTabWidget):
@@ -20,13 +20,12 @@ class MyTabWidget(QTabWidget):
         super(MyTabWidget, self).__init__(parent)
         self.setupUi()
 
+    def addTabModual(self, moduals):
+        for m in moduals:
+            self.addTab(m.Tab(), m.Tab.name)
+
     def setupUi(self):
-        self.addTab(tab1.Tab(), tab1.Tab.name)
-        self.addTab(tab2.Tab(), tab2.Tab.name)
-        self.addTab(tab3.Tab(), tab3.Tab.name)
-        self.addTab(tab4.Tab(), tab4.Tab.name)
-        self.addTab(tab5.Tab(), tab5.Tab.name)
-        self.addTab(tab6.Tab(), tab6.Tab.name)
+        self.addTabModual([tab1, tab2, tab3, tab4, tab4, tab5, tab6, tab7])
 
 
 class MainDlg(QWidget):
