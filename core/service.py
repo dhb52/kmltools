@@ -119,25 +119,27 @@ def link_radio_cran(radio_points, cran_points, grids, out_kml) -> str:
 
     kml_obj.append(root_folder)
     result = StringIO()
+    result.write(
+        "归属网格,网格所在目录,CRAN机房,CRAN机房经度,CRAN机房纬度,CRAN机房所在目录,基站,基站经度,基站纬度,基站所在目录\n"
+    )
     for link in grid_links:
-        grids, grid_cran, grid_radio = link
-        if len(grid_cran) != 1:
-            result.write(f"{grids.name}:网格机房个数为{len(grid_cran)}\n")
-            continue
-
-        grid_folder = kml.Folder(name=grids.name)
+        grid, grid_cran, grid_radio = link
+        grid_folder = kml.Folder(name=grid.name)
         root_folder.append(grid_folder)
         for p1 in grid_cran:
             for p2 in grid_radio:
                 if p1.x != p2.x and p1.y != p2.y:
-                    line = ShapelyLineString([(p1.x, p1.y, 0), (p2.x, p2.y, 0)])
-                    p = kml.Placemark(name=f"{p1.name}<->{p2.name}", styles=[style])
-                    p.geometry = line
-                    grid_folder.append(p)
+                    result.write(
+                        f"{grid.name},{grid.path},{p1.name},{p1.x},{p1.y},{p1.path},{p2.name},{p2.x},{p2.y},{p2.path}\n"
+                    )
+                    if len(grid_cran) == 1:
+                        line = ShapelyLineString([(p1.x, p1.y, 0), (p2.x, p2.y, 0)])
+                        p = kml.Placemark(name=f"{p1.name}<->{p2.name}", styles=[style])
+                        p.geometry = line
+                        grid_folder.append(p)
 
     kmlstr = kml_obj.to_string(prettyprint=True)
     with open(out_kml, "w") as out:
         out.write(kmlstr)
 
-    result.write("连线完成\n")
     return result.getvalue()
