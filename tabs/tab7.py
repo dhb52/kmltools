@@ -20,7 +20,7 @@ from core import loader, service
 
 
 class Tab(QWidget):
-    name = "网格站点机房连线"
+    name = "CRAN方案输出"
 
     def __init__(self, parent=None):
         super(Tab, self).__init__(parent)
@@ -57,7 +57,7 @@ class Tab(QWidget):
         hbox3.addWidget(editGridPath)
         hbox3.addWidget(btnChooseGrid)
 
-        btnCalculate = QPushButton("连线")
+        btnCalculate = QPushButton("输出")
         hbox4 = QHBoxLayout()
         hbox4.addStretch(1)
         hbox4.addWidget(btnCalculate)
