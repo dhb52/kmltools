@@ -76,7 +76,7 @@ def link_points_kml(excel_path, kml_path) -> None:
             p.geometry = line
             folder.append(p)
     kmlstr = kml_obj.to_string(prettyprint=True)
-    with open(kml_path, "w") as out:
+    with open(kml_path, "w", encoding="UTF8") as out:
         out.write(kmlstr)
     wb.close()
 
@@ -139,7 +139,7 @@ def link_radio_cran(radio_points, cran_points, grids, out_kml) -> str:
                         grid_folder.append(p)
 
     kmlstr = kml_obj.to_string(prettyprint=True)
-    with open(out_kml, "w") as out:
+    with open(out_kml, mode="w", encoding="UTF8") as out:
         out.write(kmlstr)
 
     return result.getvalue()
