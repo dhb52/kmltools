@@ -74,7 +74,7 @@ class Tab(QWidget):
         pointFileName = self.editPointsPath.text()
         polygonFileName = self.editPolygonsPath.text()
         if not (os.path.exists(polygonFileName) and os.path.exists(pointFileName)):
-            QMessageBox.critical(None, "找不到文件", "请重新选择文件", QMessageBox.Ok)
+            QMessageBox.critical(self, "找不到文件", "请重新选择文件", QMessageBox.Ok)
             return
 
         self.txtResult.setPlainText("")
@@ -87,7 +87,7 @@ class Tab(QWidget):
             self.txtResult.setPlainText(result)
         except:
             msg = traceback.format_exc()
-            QMessageBox.critical(None, "错误", msg, QMessageBox.Ok)
+            QMessageBox.critical(self, "错误", msg, QMessageBox.Ok)
         finally:
             QApplication.restoreOverrideCursor()
 

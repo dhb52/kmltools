@@ -92,12 +92,12 @@ class Tab(QWidget):
             and os.path.exists(cranFileName)
             and os.path.exists(gridFileName)
         ):
-            QMessageBox.critical(None, "找不到文件", "请重新选择文件", QMessageBox.Ok)
+            QMessageBox.critical(self, "找不到文件", "请重新选择文件", QMessageBox.Ok)
             return
 
         out_kml = self.chooseOutKml()
         if not out_kml:
-            QMessageBox.critical(None, "找不到文件", "请设置选择输出文件", QMessageBox.Ok)
+            QMessageBox.critical(self, "找不到文件", "请设置选择输出文件", QMessageBox.Ok)
             return
 
         self.txtResult.setPlainText("")
@@ -111,7 +111,7 @@ class Tab(QWidget):
             self.txtResult.setPlainText(result)
         except:
             msg = traceback.format_exc()
-            QMessageBox.critical(None, "错误", msg, QMessageBox.Ok)
+            QMessageBox.critical(self, "错误", msg, QMessageBox.Ok)
         finally:
             QApplication.restoreOverrideCursor()
 

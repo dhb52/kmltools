@@ -63,7 +63,7 @@ class Tab(QWidget):
     def generate(self):
         excelPath = self.editExcelPath.text()
         if not os.path.exists(excelPath):
-            QMessageBox.critical(None, "找不到文件", "请重新选择文件", QMessageBox.Ok)
+            QMessageBox.critical(self, "找不到文件", "请重新选择文件", QMessageBox.Ok)
             return
         kmlPath, _ = QFileDialog.getSaveFileName(
             self, "保存为KML文件", "", "KML文件 (*.kml *.kmz)",
@@ -77,7 +77,7 @@ class Tab(QWidget):
             self.txtResult.setPlainText("成功生成KML文件")
         except:
             msg = traceback.format_exc()
-            QMessageBox.critical(None, "错误", msg, QMessageBox.Ok)
+            QMessageBox.critical(self, "错误", msg, QMessageBox.Ok)
         finally:
             QApplication.restoreOverrideCursor()
 
