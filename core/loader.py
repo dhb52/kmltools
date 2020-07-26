@@ -27,7 +27,7 @@ def _find_features(result, element, feature_type, path=""):
     if not getattr(element, "features", None):
         return
     for feature in element.features():
-        if isinstance(feature, kml.Folder):
+        if isinstance(feature, kml.Folder) or isinstance(feature, kml.Document):
             if not feature.name:
                 feature.name = ""
             new_path = "/".join((path, feature.name))
