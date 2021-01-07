@@ -1,6 +1,6 @@
 fastkml==0.11
 geographiclib==1.50
-lxml==4.5.1
+lxml==4.6.2
 PyInstaller==3.6
 PyQt5==5.15.0
 Shapely==1.7.0
