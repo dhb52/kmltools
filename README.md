@@ -48,3 +48,13 @@ pip install -r requirements.txt
 pyrcc5 resource.qrc -o rc_resource.py
 pyinstaller -i app.ico -w -F kmltools.pyw
 ```
+
+# PyInstaller 打包后执行错误
+
+`failed to execute pyi_rth_pkgres`
+
+
+```sh
+pip uninstall pyinstaller
+pip install https://github.com/pyinstaller/pyinstaller/archive/develop.zip
+```
