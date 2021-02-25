@@ -25,7 +25,7 @@ class MyTabWidget(QTabWidget):
             self.addTab(m.Tab(), m.Tab.name)
 
     def setupUi(self):
-        self.addTabModual([tab1, tab2, tab3, tab4, tab4, tab5, tab6, tab7])
+        self.addTabModual([tab1, tab2, tab3, tab4, tab5, tab6, tab7])
 
 
 class MainDlg(QWidget):
