@@ -6,4 +6,4 @@ openpyxl==3.0.4
 PyInstaller==3.6
 PyQt5==5.15.0
 PyQt5-stubs==5.14.2.2
-Shapely==1.7.0
+Shapely==1.7.1
