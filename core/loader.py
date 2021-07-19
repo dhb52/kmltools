@@ -55,5 +55,9 @@ def load_polygons(kml_file) -> list:
     return _load_feature_from_file(kml_file, geometry.Polygon)
 
 
+def load_multi_polygons(kml_file) -> list:
+    return _load_feature_from_file(kml_file, geometry.MultiPolygon)
+
+
 def load_lines(kml_file) -> list:
     return _load_feature_from_file(kml_file, geometry.LineString)
