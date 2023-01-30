@@ -1,9 +1,8 @@
-black==19.10b0
-fastkml==0.11
-geographiclib==1.50
-lxml==4.5.1
-openpyxl==3.0.4
-PyInstaller==3.6
-PyQt5==5.15.0
-PyQt5-stubs==5.14.2.2
-Shapely==1.7.1
+fastkml==0.12
+geographiclib==2.0
+lxml==4.9.2
+PyQt5==5.15.8
+PyQt5-Qt5==5.15.2
+shapely==2.0.1
+## deploy
+# PyInstaller==3.6

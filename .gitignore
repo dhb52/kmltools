@@ -107,10 +107,11 @@ ui_*.py
 rc_*.py
 
 # venv
-venv
-env
-env7
+venv/
+env/
+env7/
 pyvenv.cfg
+.venv/
 
 pip-selfcheck.json
 
