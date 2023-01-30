@@ -2,7 +2,7 @@ fastkml==0.12
 geographiclib==2.0
 lxml==4.9.2
 PyQt5==5.15.8
-PyQt5-Qt5==5.15.2
 shapely==2.0.1
+openpyxl==3.0.10
 ## deploy
 # PyInstaller==3.6
