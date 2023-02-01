@@ -26,7 +26,6 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: build
       run: |
-        pyuic5 maindlg.ui -o ui_maindlg5.py
         pyrcc5 resource.rc -o rc_resource.py
     
     - name: bundle
