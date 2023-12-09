@@ -5,4 +5,4 @@ PyQt5==5.15.8
 shapely==2.0.1
 openpyxl==3.0.10
 ## deploy
-pyinstaller==5.7.0
+pyinstaller==5.13.1
